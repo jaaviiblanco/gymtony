@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario - GymTony</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/styleCalendar.css">
+</head>
+<body>
+	<section class="container">
+		<header class="jumbotron" th:replace="~{fragments/template :: header}">GymTony</header>
+		
+		<h1 class="title">Calendario de clases</h1>
+		
+		<div class="calendar">
+			<div class="calendar_info">
+				<div class="calendar_prev" id="prev_month">#9664</div>
+				<div class="calendar_month" id="month"></div>
+				<div class="calendar_year" id="year"></div>
+				<div class="calendar_next" id="next_month">#9654</div>
+			</div>
+			
+			<div class="calendar_week">
+				<div class="calendar_day calendar_item">Lun</div>
+				<div class="calendar_day calendar_item">Mar</div>
+				<div class="calendar_day calendar_item">Mie</div>
+				<div class="calendar_day calendar_item">Jue</div>
+				<div class="calendar_day calendar_item">Vie</div>
+				<div class="calendar_day calendar_item">Sab</div>
+				<div class="calendar_day calendar_item">Dom</div>
+			</div>
+			
+			<div class="calendar_dates" id="dates"></div>
+		</div>
+		
+		<div class="footer" th:replace="~{fragments/template :: footer}"></div>
+	</section>
+	<script src="../static/js/scriptCalendar.js"></script>
+</body>
