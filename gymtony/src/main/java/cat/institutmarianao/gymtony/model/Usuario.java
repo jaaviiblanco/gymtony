@@ -87,7 +87,7 @@ public abstract class Usuario implements UserDetails, Serializable {
     private int age;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "role", insertable = false, updatable = false)
     private Role role = Role.CLIENTE; // ✅ Cliente por defecto
 
     public Usuario(String username, String password, String name, String dni, String email, int age, Role role) {
