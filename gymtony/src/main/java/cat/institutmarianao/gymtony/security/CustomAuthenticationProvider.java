@@ -1,70 +1,53 @@
 package cat.institutmarianao.gymtony.security;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import cat.institutmarianao.gymtony.model.Usuario;
+import cat.institutmarianao.gymtony.repositories.UsuarioRepository;
+
+import java.util.Optional;
 
 @Component
-@PropertySource("classpath:messages.properties")
-@PropertySource("classpath:application.properties")
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-	@Value("${webService.host}")
-	private String webServiceHost;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-	@Value("${webService.port}")
-	private String webServicePort;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private RestTemplate restTemplate;
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        String username = authentication.getName();
+        String rawPassword = authentication.getCredentials().toString();
 
-	@Value("${exception.badCredentials}")
-	private String badCredentialsMessage;
+        // Buscar usuario en la base de datos
+        Optional<Usuario> optionalUser = usuarioRepository.findByUsername(username);
+        
+        if (optionalUser.isEmpty()) {
+            throw new BadCredentialsException("Usuario no encontrado");
+        }
 
-	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		final String uri = webServiceHost + ":" + webServicePort + "/users/authenticate";
+        Usuario user = optionalUser.get();
 
-		String username = authentication.getName();
-		String password = authentication.getCredentials().toString();
+        // Verificar la contraseña
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new BadCredentialsException("Contraseña incorrecta");
+        }
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+        // Si todo está bien, autenticamos al usuario
+        return new UsernamePasswordAuthenticationToken(user, rawPassword, user.getAuthorities());
+    }
 
-		Map<String, String> postBody = new HashMap<>();
-		postBody.put("username", username);
-		postBody.put("passwd", password);
-
-		HttpEntity<Map<String, String>> request = new HttpEntity<>(postBody, headers);
-
-		try {
-			Usuario userDetails = restTemplate.postForObject(uri, request, Usuario.class);
-			if (userDetails != null) {
-				return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-			}
-		} catch (Exception e) {
-			// Do nothing
-		}
-		throw new BadCredentialsException(badCredentialsMessage);
-	}
-
-	@Override
-	public boolean supports(Class<?> authentication) {
-		return authentication.equals(UsernamePasswordAuthenticationToken.class);
-	}
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
 }
