@@ -10,16 +10,27 @@
         body {
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
+            overflow: hidden; /* Evita la barra de desplazamiento */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .login-container {
             max-width: 400px;
-            margin: 0 auto;
+            width: 100%;
             padding: 30px;
             border-radius: 10px;
             background-color: #fff;
             box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
-            margin-top: 50px;
         }
 
         .login-container h2 {
@@ -32,11 +43,6 @@
             border-radius: 25px;
             margin-bottom: 25px;
             border-color: #ddd;
-        }
-
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: none;
         }
 
         .btn-login {
@@ -53,50 +59,61 @@
             border-color: #0056b3;
         }
 
-        .btn-login:focus {
-            outline: none;
-            box-shadow: none;
-        }
-
         .footer {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 20px;
+            padding-bottom: 10px;
             color: #777;
         }
+
+        /* Ajuste del tamaño del logo */
+        .logo-img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        /* Media queries para dispositivos móviles */
+        @media (max-width: 768px) {
+            .logo-img {
+                max-width: 100px;
+            }
+
+            .login-container {
+                padding: 20px;
+            }
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <div class="text-center">
-            <br>
-            <img src="/images/logo.jpg" alt="Gym Logo" height="100">       
+            <img src="/images/logo.jpg" alt="Gym Logo" class="logo-img">
         </div>
         <br>
         <h1 class="mb-4 text-center"><b>GymTony</b></h1>
         <div class="login-container">
             <h2 th:text="#{login.iniciar.sesion}"></h2>
             <form th:action="@{/login}" method="post">
-			    <div class="form-group">
-			        <input type="text" class="form-control" name="username" placeholder="Usuario" required>
-			    </div>
-			    <div class="form-group">
-			        <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
-			    </div>
-			    <button type="submit" class="btn btn-primary btn-block btn-login">Acceder</button>
-			
-			    <div th:if="${param.error}" class="alert alert-danger text-center mt-3">
-			        Usuario o contraseña incorrectos.
-			    </div>
-			</form>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="username" placeholder="Usuario" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-login" th:text="#{login.acceder}"></button>
+                
+                <div th:if="${param.error}" class="alert alert-danger text-center mt-3" th:text="#{exception.badCredentials}"></div>
+            </form>
+            <div class="text-center mt-3">
+                <span th:text="#{login.sincuenta}"></span>
+                <a href="/register" class="btn btn-link" th:text="#{login.registrarse}"></a>
+            </div>
         </div>
     </div>
 
     <div class="footer">
         © 2024 GymTony. Todos los derechos reservados.
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
