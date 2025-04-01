@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import cat.institutmarianao.gymtony.model.Cliente;
+import cat.institutmarianao.gymtony.model.Usuario;
 import cat.institutmarianao.gymtony.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
@@ -20,24 +21,41 @@ public class RegisterController {
 
     @GetMapping("/register")
     public String registerForm(Model model) {
-        model.addAttribute("usuario", new Cliente());
-        return "register";
+        model.addAttribute("usuario", new Cliente("", "", "", "", "", 16));  
+        return "register";  
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestParam String username, @RequestParam String password, Model model) {
-        if (usuarioService.findByUsername(username).isPresent()) {
-            model.addAttribute("error", "El usuario ya existe.");
-            return "register";
+    public String registerUser(@RequestParam String username, @RequestParam String password,
+                               @RequestParam String confirmPassword, @RequestParam String name,
+                               @RequestParam String dni, @RequestParam String email, @RequestParam int age,
+                               Model model) {
+
+        // Verificar si el DNI ya existe
+        if (usuarioService.findByDni(dni).isPresent()) {
+            model.addAttribute("errorDni", true);
+            return "register"; 
         }
 
-        Cliente nuevoUsuario = new Cliente();
-        nuevoUsuario.setUsername(username);
-        nuevoUsuario.setPassword(passwordEncoder.encode(password)); // Cifrar contraseña
-        usuarioService.save(nuevoUsuario);
-        
-        model.addAttribute("successMessage", "usuario.creado"); // Mensaje de éxito
+        // Verificar si las contraseñas coinciden
+        if (!password.equals(confirmPassword)) {
+            model.addAttribute("errorPassword", true);
+            return "register"; 
+        }
 
-        return "redirect:/login";
+        // Crear un nuevo usuario de tipo Cliente
+        Usuario nuevoUsuario = new Cliente(username, password, name, dni, email, age);
+        
+        // Encriptar la contraseña antes de guardarla
+        nuevoUsuario.setPassword(passwordEncoder.encode(password));
+
+        // Guardar el nuevo usuario en la base de datos
+        usuarioService.save(nuevoUsuario);
+
+        // Mensaje de éxito
+        model.addAttribute("successMessage", "Usuario creado correctamente.");
+        
+        // Redirigir a la página de login después de crear el usuario.
+        return "redirect:/login";  
     }
 }

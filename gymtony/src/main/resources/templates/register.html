@@ -59,9 +59,8 @@
             color: #777;
         }
 
-        /* Ajuste del tamaño del logo */
         .logo-img {
-            max-width: 100px; /* Tamaño uniforme para el logo */
+            max-width: 100px;
             height: auto;
         }
     </style>
@@ -69,60 +68,68 @@
 <body>
     <div class="container">
         <div class="text-center">
-            <br>
             <img th:src="@{/images/logo.jpg}" alt="Gym Logo" class="logo-img">        
         </div>
         <br>
         <h1 class="mb-4 text-center"><b>GymTony</b></h1>
         <div class="login-container">
-            <h2>Registro de nuevo usuario</h2>
+            <h2 th:text="#{register.titulo}"></h2>
 
-            <!-- Mensaje de error si el usuario ya existe -->
-            <div th:if="${error}" class="alert alert-danger text-center">
-                <span th:text="${error}"></span>
+            <!-- Mensaje de error si el DNI ya está registrado -->
+            <div th:if="${errorDni}" class="alert alert-danger text-center">
+                <span th:text="#{register.error.dni}"></span>
             </div>
 
-            <!-- Mensaje de éxito si el usuario ha sido creado -->
+            <!-- Mensaje de éxito -->
             <div th:if="${successMessage}" class="alert alert-success text-center">
                 <span th:text="#{${successMessage}}"></span>
             </div>
 
-            <form th:action="@{/register}" th:object="${usuario}" method="post" onsubmit="return validarPassword()">
+            <form th:action="@{/register}" th:object="${usuario}" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" th:field="*{name}" placeholder="Nombre completo" required>
+                    <input type="text" class="form-control" th:field="*{name}" placeholder="#{register.nombre}" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-control" th:field="*{email}" placeholder="Correo electrónico" required>
+                    <input type="number" class="form-control" th:field="*{age}" placeholder="#{register.edad}" required min="16" max="120">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" th:field="*{username}" placeholder="Usuario" required>
+                    <input type="text" class="form-control" th:field="*{dni}" placeholder="#{register.dni}" required pattern="^[0-9]{8}[A-Za-z]$" title="Formato: 12345678A">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Contraseña" required>
+                    <input type="email" class="form-control" th:field="*{email}" placeholder="#{register.email}" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirmar contraseña" required>
+                    <input type="text" class="form-control" th:field="*{username}" placeholder="#{register.usuario}" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block btn-login">Registrarse</button>
-                <p class="text-center">¿Ya tienes cuenta? <a href="/login" class="btn btn-link">Iniciar sesión</a></p>
+                <div class="form-group">
+                    <input type="password" class="form-control" th:field="*{password}" placeholder="#{register.contraseña}" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" th:field="*{confirmPassword}" placeholder="#{register.confirmar.contraseña}" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-login" th:text="#{register.registrarse}"></button>
+                <p class="text-center">¿Ya tienes cuenta? <a href="/login" class="btn btn-link" th:text="#{register.iniciar.sesion}"></a></p>
+                <!-- Mensaje de error si las contraseñas no coinciden -->
+			    <div th:if="${errorPassword}" class="alert alert-danger text-center mt-3">
+			        Las contraseñas no coinciden.
+			    </div>
+			
+			    <!-- Mensaje de error si el DNI ya está registrado -->
+			    <div th:if="${errorDni}" class="alert alert-danger text-center mt-3">
+			        El DNI ya está registrado.
+			    </div>
+			
+			    <!-- Mensaje de éxito -->
+			    <div th:if="${successMessage}" class="alert alert-success text-center mt-3">
+			        Usuario creado correctamente.
+			    </div>
             </form>
         </div>
     </div>
 
     <div class="footer">
-        © 2024 MyGym. Todos los derechos reservados.
+        © 2024 GymTony. Todos los derechos reservados.
     </div>
 
-    <script>
-        function validarPassword() {
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirm-password").value;
-            if (password !== confirmPassword) {
-                alert("Las contraseñas no coinciden");
-                return false;
-            }
-            return true;
-        }
-    </script>
 </body>
 </html>

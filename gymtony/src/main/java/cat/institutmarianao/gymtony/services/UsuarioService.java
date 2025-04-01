@@ -22,4 +22,6 @@ public interface UsuarioService extends UserDetailsService {
     void remove(String username);
 
     Optional<Usuario> findByUsername(String username);
+    Optional<Usuario> findByDni(String dni);
+    Optional<Usuario> findByEmail(String email);
 }

@@ -47,12 +47,13 @@ public class WebSecurityConfiguration {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
+                .requestMatchers("/admin/**").hasAnyRole("RESPONSABLE")
                 .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
                 .loginPage(LOGIN_URL)
                 .defaultSuccessUrl(DEFAULT_SUCCESS_URL, true)
-                .failureUrl(LOGIN_FAIL_URL) // Redirección en caso de error
+                .failureUrl(LOGIN_FAIL_URL)
                 .permitAll()
             )
             .logout(logout -> logout
@@ -65,3 +66,4 @@ public class WebSecurityConfiguration {
         return http.build();
     }
 }
+

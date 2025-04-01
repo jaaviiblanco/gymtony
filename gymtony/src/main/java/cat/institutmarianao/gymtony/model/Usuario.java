@@ -89,7 +89,14 @@ public abstract class Usuario implements UserDetails, Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", insertable = false, updatable = false)
     private Role role = Role.CLIENTE; // ✅ Cliente por defecto
-
+    
+    @Transient  // Esto indica que no se persiste en la base de datos
+    private String confirmPassword;
+    
+    // Método de validación de las contraseñas
+    public boolean isPasswordValid() {
+        return password != null && password.equals(confirmPassword);
+    }
     public Usuario(String username, String password, String name, String dni, String email, int age, Role role) {
         this.username = username;
         this.password = password;
