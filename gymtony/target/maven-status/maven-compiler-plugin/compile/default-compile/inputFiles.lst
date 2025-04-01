@@ -19,6 +19,7 @@ C:\Users\Javier\Projecte\gymtony\src\main\java\cat\institutmarianao\gymtony\repo
 C:\Users\Javier\Projecte\gymtony\src\main\java\cat\institutmarianao\gymtony\validation\groups\OnClaseCreate.java
 C:\Users\Javier\Projecte\gymtony\src\main\java\cat\institutmarianao\gymtony\controllers\RegisterController.java
 C:\Users\Javier\Projecte\gymtony\src\main\java\cat\institutmarianao\gymtony\exception\ForbiddenException.java
+C:\Users\Javier\Projecte\gymtony\src\main\java\cat\institutmarianao\gymtony\security\CustomUserDetailsService.java
 C:\Users\Javier\Projecte\gymtony\src\main\java\cat\institutmarianao\gymtony\services\impl\HorarioServiceImpl.java
 C:\Users\Javier\Projecte\gymtony\src\main\java\cat\institutmarianao\gymtony\services\HorarioService.java
 C:\Users\Javier\Projecte\gymtony\src\main\java\cat\institutmarianao\gymtony\model\Horario.java

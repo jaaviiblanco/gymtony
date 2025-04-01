@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - MyGym</title>
+    <title>Registro - GymTony</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -30,7 +30,7 @@
 
         .form-control {
             border-radius: 25px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             border-color: #ddd;
         }
 
@@ -53,47 +53,59 @@
             border-color: #0056b3;
         }
 
-        .btn-login:focus {
-            outline: none;
-            box-shadow: none;
-        }
-
         .footer {
             text-align: center;
             margin-top: 50px;
             color: #777;
+        }
+
+        /* Ajuste del tamaño del logo */
+        .logo-img {
+            max-width: 100px; /* Tamaño uniforme para el logo */
+            height: auto;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="text-center">
-        	<br>
-            <img src="/home/cfgs/git/Sprint-Final/gymwebapp/src/main/resources/static/images/logo.jpg" alt="Gym Logo" height="100">        
+            <br>
+            <img th:src="@{/images/logo.jpg}" alt="Gym Logo" class="logo-img">        
         </div>
         <br>
-        <h1 class="mb-4 text-center"><b>MyGym</b></h1>
+        <h1 class="mb-4 text-center"><b>GymTony</b></h1>
         <div class="login-container">
             <h2>Registro de nuevo usuario</h2>
-			<form th:action="@{/register}" th:object="${usuario}" method="post">
-			    <div class="form-group">
-			        <input type="text" class="form-control" th:field="*{nombre}" placeholder="Nombre completo" required>
-			    </div>
-			    <div class="form-group">
-			        <input type="email" class="form-control" th:field="*{email}" placeholder="Correo electrónico" required>
-			    </div>
-			    <div class="form-group">
-			        <input type="text" class="form-control" th:field="*{username}" placeholder="Usuario" required>
-			    </div>
-			    <div class="form-group">
-			        <input type="password" class="form-control" th:field="*{password}" placeholder="Contraseña" required>
-			    </div>
-			    <div class="form-group">
-			        <input type="password" class="form-control" id="confirm-password" placeholder="Confirmar contraseña" required>
-			    </div>
-			    <button type="submit" class="btn btn-primary btn-block btn-login">Registrarse</button>
-			    <p class="text-center">¿Ya tienes cuenta? <a href="/login" class="btn btn-link">Iniciar sesión</a></p>
-			</form>
+
+            <!-- Mensaje de error si el usuario ya existe -->
+            <div th:if="${error}" class="alert alert-danger text-center">
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- Mensaje de éxito si el usuario ha sido creado -->
+            <div th:if="${successMessage}" class="alert alert-success text-center">
+                <span th:text="#{${successMessage}}"></span>
+            </div>
+
+            <form th:action="@{/register}" th:object="${usuario}" method="post" onsubmit="return validarPassword()">
+                <div class="form-group">
+                    <input type="text" class="form-control" th:field="*{name}" placeholder="Nombre completo" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" th:field="*{email}" placeholder="Correo electrónico" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" th:field="*{username}" placeholder="Usuario" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Contraseña" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirmar contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-login">Registrarse</button>
+                <p class="text-center">¿Ya tienes cuenta? <a href="/login" class="btn btn-link">Iniciar sesión</a></p>
+            </form>
         </div>
     </div>
 
@@ -101,8 +113,16 @@
         © 2024 MyGym. Todos los derechos reservados.
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function validarPassword() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+            if (password !== confirmPassword) {
+                alert("Las contraseñas no coinciden");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>

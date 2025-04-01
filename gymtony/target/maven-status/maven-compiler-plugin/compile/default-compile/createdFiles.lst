@@ -45,6 +45,7 @@ cat\institutmarianao\gymtony\controllers\RegisterController.class
 cat\institutmarianao\gymtony\controllers\UsuarioController.class
 cat\institutmarianao\gymtony\validation\groups\OnReservaUpdate.class
 cat\institutmarianao\gymtony\repositories\UsuarioRepository.class
+cat\institutmarianao\gymtony\security\CustomUserDetailsService.class
 cat\institutmarianao\gymtony\services\UsuarioService.class
 cat\institutmarianao\gymtony\services\PlanGimnasioService.class
 cat\institutmarianao\gymtony\model\Usuario.class

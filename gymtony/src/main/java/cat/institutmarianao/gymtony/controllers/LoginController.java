@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import cat.institutmarianao.gymtony.model.Cliente;
 
 @Controller
 public class LoginController {
 
     @GetMapping(value = "/")
-    public String root(HttpServletRequest request) throws ServletException {
+    public String root() {
         return "redirect:/home";
     }
 
@@ -24,7 +23,7 @@ public class LoginController {
 
     @GetMapping(value = "/loginfailed")
     public String loginFailed(Model model) {
-        model.addAttribute("error", "true");
+        model.addAttribute("error", true);
         return "login";
     }
 
@@ -35,13 +34,6 @@ public class LoginController {
             session.invalidate();
         }
         request.logout();
-        return "redirect:/";
+        return "redirect:/login";
     }
-
-    @GetMapping("/register")
-    public String registerForm(Model model) {
-        model.addAttribute("usuario", new Cliente()); // Usamos Cliente en vez de Usuario
-        return "register";
-    }
-
 }

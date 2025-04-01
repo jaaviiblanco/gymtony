@@ -85,15 +85,21 @@ class UsuarioServiceImplTest {
     }
 
     @Test
-    void shouldAddUser() {
+    void shouldSaveUserWithEncodedPassword() {
+        // Simulamos la codificación de la contraseña
         when(passwordEncoder.encode(anyString())).thenReturn("hashedPassword");
+
+        // Simulamos la operación de guardado en el repositorio
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
-        Usuario savedUser = usuarioService.add(usuario);
+        // Llamamos al método save()
+        usuarioService.save(usuario);
 
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser.getPassword()).isEqualTo("hashedPassword");
-        verify(usuarioRepository, times(1)).save(any(Usuario.class));
+        // Verificamos que la contraseña está correctamente cifrada
+        assertThat(usuario.getPassword()).isEqualTo("hashedPassword");
+
+        // Verificamos que se haya llamado al repositorio para guardar el usuario
+        verify(usuarioRepository, times(1)).save(usuario);
     }
 
     @Test
@@ -153,16 +159,5 @@ class UsuarioServiceImplTest {
         assertThatThrownBy(() -> usuarioService.findByUsername("unknown"))
             .isInstanceOf(UsernameNotFoundException.class)
             .hasMessage("Usuario no encontrado: unknown");
-    }
-
-    @Test
-    void shouldSaveUserWithEncodedPassword() {
-        when(passwordEncoder.encode(anyString())).thenReturn("hashedPassword");
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
-
-        usuarioService.save(usuario);
-
-        assertThat(usuario.getPassword()).isEqualTo("hashedPassword");
-        verify(usuarioRepository, times(1)).save(usuario);
     }
 }

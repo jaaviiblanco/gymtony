@@ -68,8 +68,9 @@
 
         /* Ajuste del tamaño del logo */
         .logo-img {
-            max-width: 100px;
+            max-width: 100px; /* Tamaño uniforme para el logo */
             height: auto;
+            padding-top: 5%;
         }
 
         /* Media queries para dispositivos móviles */
@@ -82,7 +83,6 @@
                 padding: 20px;
             }
         }
-
     </style>
 </head>
 <body>
@@ -103,7 +103,10 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-block btn-login" th:text="#{login.acceder}"></button>
                 
-                <div th:if="${param.error}" class="alert alert-danger text-center mt-3" th:text="#{exception.badCredentials}"></div>
+                <!-- Mensaje de error si la autenticación falla -->
+                <div th:if="${param.error} or ${error}" class="alert alert-danger text-center mt-3">
+                    Usuario o contraseña incorrectos.
+                </div>
             </form>
             <div class="text-center mt-3">
                 <span th:text="#{login.sincuenta}"></span>
