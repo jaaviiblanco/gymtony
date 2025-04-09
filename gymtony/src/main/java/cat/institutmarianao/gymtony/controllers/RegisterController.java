@@ -56,6 +56,6 @@ public class RegisterController {
         model.addAttribute("successMessage", "Usuario creado correctamente.");
         
         // Redirigir a la página de login después de crear el usuario.
-        return "redirect:/login";  
+        return "redirect:/login?success=true";  
     }
 }

@@ -14,7 +14,7 @@ public class Monitor extends Usuario {
     }
 
     public Monitor(String username, String passwd, String name, String dni, String email, int age) {
-        super(username, passwd, name, dni, email, age, Role.MONITOR);
+        super(username, passwd, name, dni, email, age, Role.monitor);
     }
 }
 

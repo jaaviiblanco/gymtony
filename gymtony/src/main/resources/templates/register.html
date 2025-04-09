@@ -74,55 +74,33 @@
         <h1 class="mb-4 text-center"><b>GymTony</b></h1>
         <div class="login-container">
             <h2 th:text="#{register.titulo}"></h2>
-
-            <!-- Mensaje de error si el DNI ya está registrado -->
-            <div th:if="${errorDni}" class="alert alert-danger text-center">
-                <span th:text="#{register.error.dni}"></span>
-            </div>
-
-            <!-- Mensaje de éxito -->
-            <div th:if="${successMessage}" class="alert alert-success text-center">
-                <span th:text="#{${successMessage}}"></span>
-            </div>
-
             <form th:action="@{/register}" th:object="${usuario}" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" th:field="*{name}" placeholder="#{register.nombre}" required>
+                    <input type="text" class="form-control" th:field="*{name}" th:placeholder="#{register.nombre}" required>
                 </div>
                 <div class="form-group">
-                    <input type="number" class="form-control" th:field="*{age}" placeholder="#{register.edad}" required min="16" max="120">
+                    <input type="number" class="form-control" th:field="*{age}" th:placeholder="#{register.edad}" required min="16" max="120">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" th:field="*{dni}" placeholder="#{register.dni}" required pattern="^[0-9]{8}[A-Za-z]$" title="Formato: 12345678A">
+                    <input type="text" class="form-control" th:field="*{dni}" th:placeholder="#{register.dni}" required pattern="^[0-9]{8}[A-Za-z]$" title="Formato: 12345678A">
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-control" th:field="*{email}" placeholder="#{register.email}" required>
+                    <input type="email" class="form-control" th:field="*{email}" th:placeholder="#{register.email}" required>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" th:field="*{username}" placeholder="#{register.usuario}" required>
+                    <input type="text" class="form-control" th:field="*{username}" th:placeholder="#{register.usuario}" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" th:field="*{password}" placeholder="#{register.contraseña}" required>
+                    <input type="password" class="form-control" th:field="*{password}" th:placeholder="#{register.contraseña}" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" th:field="*{confirmPassword}" placeholder="#{register.confirmar.contraseña}" required>
+                    <input type="password" class="form-control" th:field="*{confirmPassword}" th:placeholder="#{register.confirmar.contraseña}" required>
                 </div>
+                <div th:if="${param.success}" class="alert alert-success text-center mt-3">
+    				Usuario creado correctamente.
+				</div>
                 <button type="submit" class="btn btn-primary btn-block btn-login" th:text="#{register.registrarse}"></button>
                 <p class="text-center">¿Ya tienes cuenta? <a href="/login" class="btn btn-link" th:text="#{register.iniciar.sesion}"></a></p>
-                <!-- Mensaje de error si las contraseñas no coinciden -->
-			    <div th:if="${errorPassword}" class="alert alert-danger text-center mt-3">
-			        Las contraseñas no coinciden.
-			    </div>
-			
-			    <!-- Mensaje de error si el DNI ya está registrado -->
-			    <div th:if="${errorDni}" class="alert alert-danger text-center mt-3">
-			        El DNI ya está registrado.
-			    </div>
-			
-			    <!-- Mensaje de éxito -->
-			    <div th:if="${successMessage}" class="alert alert-success text-center mt-3">
-			        Usuario creado correctamente.
-			    </div>
             </form>
         </div>
     </div>

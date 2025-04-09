@@ -34,7 +34,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public List<Cliente> getAllClientes() {
         // Obtén todos los usuarios con rol CLIENTE
-        List<Usuario> usuarios = usuarioRepository.findByRole(Usuario.Role.CLIENTE);
+        List<Usuario> usuarios = usuarioRepository.findByRole(Usuario.Role.cliente);
         
         // Filtra la lista para obtener solo los objetos de tipo Cliente
         List<Cliente> clientes = new ArrayList<>();
@@ -49,7 +49,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public List<Monitor> getAllMonitores() {
         // Obtén todos los usuarios con rol MONITOR
-        List<Usuario> usuarios = usuarioRepository.findByRole(Usuario.Role.MONITOR);
+        List<Usuario> usuarios = usuarioRepository.findByRole(Usuario.Role.monitor);
         
         // Filtra la lista para obtener solo los objetos de tipo Monitor
         List<Monitor> monitores = new ArrayList<>();
@@ -64,7 +64,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public List<Responsable> getAllResponsables() {
         // Obtén todos los usuarios con rol RESPONSABLE
-        List<Usuario> usuarios = usuarioRepository.findByRole(Usuario.Role.RESPONSABLE);
+        List<Usuario> usuarios = usuarioRepository.findByRole(Usuario.Role.responsable);
         
         // Filtra la lista para obtener solo los objetos de tipo Responsable
         List<Responsable> responsables = new ArrayList<>();

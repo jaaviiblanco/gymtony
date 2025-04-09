@@ -18,6 +18,7 @@ cat\institutmarianao\gymtony\security\CustomAuthenticationProvider.class
 cat\institutmarianao\gymtony\services\HorarioService.class
 cat\institutmarianao\gymtony\validation\groups\OnUserCreate.class
 cat\institutmarianao\gymtony\model\Comentario.class
+cat\institutmarianao\gymtony\DataLoader.class
 cat\institutmarianao\gymtony\model\Usuario$Role.class
 cat\institutmarianao\gymtony\repositories\ComentarioRepository.class
 cat\institutmarianao\gymtony\validation\groups\OnUserUpdate.class
@@ -42,6 +43,7 @@ cat\institutmarianao\gymtony\ServletInitializer.class
 cat\institutmarianao\gymtony\model\Reserva.class
 cat\institutmarianao\gymtony\repositories\ReservaRepository.class
 cat\institutmarianao\gymtony\controllers\RegisterController.class
+cat\institutmarianao\gymtony\controllers\AdminController.class
 cat\institutmarianao\gymtony\controllers\UsuarioController.class
 cat\institutmarianao\gymtony\validation\groups\OnReservaUpdate.class
 cat\institutmarianao\gymtony\repositories\UsuarioRepository.class

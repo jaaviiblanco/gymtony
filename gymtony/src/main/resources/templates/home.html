@@ -1,11 +1,14 @@
-
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - MyGym</title>
+    <title>Inicio - MyGym</title>
+    <!-- Enlaces de CSS y Bootstrap aquí -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/headerCSS.css">
+    <link rel="stylesheet" href="/css/footerCSS.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">	
     <style>
         body {
             background-color: #f8f9fa;
@@ -47,67 +50,78 @@
     </style>
 </head>
 <body>
-	<section class="container">
-		<header class="jumbotron" th:replace="~{fragments/template :: header}">MyGym</header>
-	    
-	    <div class="container">
-	        <div class="welcome-section">
-	            <h2>Bienvenido, <span th:text="${user.fullName}">Usuario</span>!</h2>
-	            <p>Estamos encantados de verte de nuevo en MyGym.</p>
-	        </div>
-	
-	        <div class="row">
-	            <!-- Resumen de la cuenta -->
-	            <div class="col-md-4">
-	                <div class="card">
-	                    <div class="card-header">
-	                        <h5 class="mb-0">Resumen de la cuenta</h5>
-	                    </div>
-	                    <div class="card-body">
-	                        <p><strong>Nombre de usuario:</strong> <span th:text="${user.username}">usuario</span></p>
-	                        <p><strong>Email:</strong> <span th:text="${user.email}">email@example.com</span></p>
-	                        <p><strong>Rol:</strong> <span th:text="${user.rol}">Cliente</span></p>
-	                    </div>
-	                </div>
-	            </div>
-	
-	            <!-- Próximas clases reservadas -->
-	            <div class="col-md-4">
-	                <div class="card">
-	                    <div class="card-header">
-	                        <h5 class="mb-0">Próximas clases reservadas</h5>
-	                    </div>
-	                    <div class="card-body">
-	                        <ul class="list-group list-group-flush">
-	                            <li class="list-group-item" th:each="clase : ${proximasClases}">
-	                                <p class="mb-0"><strong th:text="${clase.nombre}">Nombre de la clase</strong></p>
-	                                <small class="text-muted" th:text="${#dates.format(clase.fecha, 'dd/MM/yyyy HH:mm')}">Fecha y hora</small>
-	                            </li>
-	                        </ul>
-	                    </div>
-	                </div>
-	            </div>
-	
-	            <!-- Notificaciones importantes -->
-	            <div class="col-md-4">
-	                <div class="card">
-	                    <div class="card-header">
-	                        <h5 class="mb-0">Notificaciones importantes</h5>
-	                    </div>
-	                    <div class="card-body">
-	                        <ul class="list-group list-group-flush">
-	                            <li class="list-group-item notification" th:each="notificacion : ${notificaciones}">
-	                                <p class="mb-0" th:text="${notificacion}">Texto de la notificación</p>
-	                            </li>
-	                        </ul>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-		<footer class="footer" th:replace="~{fragments/template :: footer}"></footer>
-	</section>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <section class="container">
+        <!-- Incluir el fragmento de header -->
+        <header th:include="~{fragments/header :: header}"></header>
+
+        <div class="container">
+            <div class="welcome-section">
+                <h2>Bienvenido, <span th:text="${usuario.name}">Usuario</span>!</h2>
+                <p>Estamos encantados de verte de nuevo en MyGym.</p>
+            </div>
+
+            <div class="row">
+                <!-- Resumen de la cuenta -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Resumen de la cuenta</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Nombre de usuario:</strong> <span th:text="${usuario.username}">usuario</span></p>
+                            <p><strong>Email:</strong> <span th:text="${usuario.email}">email@example.com</span></p>
+                            <p><strong>Rol:</strong> <span th:text="${usuario.role}">Cliente</span></p>
+                            <p><strong>Edad:</strong> <span th:text="${usuario.age}">25</span></p>
+                            <p><strong>DNI:</strong> <span th:text="${usuario.dni}">12345678A</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Próximas clases reservadas -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Próximas clases reservadas</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" th:each="reserva : ${reservasConfirmadas}">
+                                    <p class="mb-0"><strong th:text="${reserva.clase.nombre}">Clase de Ejemplo</strong></p>
+                                    <small class="text-muted" th:text="${#dates.format(reserva.clase.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha y hora</small>
+                                    <p th:text="'Ubicación: ' + ${reserva.clase.ubicacion}"></p>
+                                    <p th:text="'Estado: ' + ${reserva.confirmada ? 'Confirmada' : 'Pendiente'}"></p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comentarios recientes -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Comentarios recientes</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item notification" th:each="comentario : ${comentariosRecientes}">
+                                    <p class="mb-0" th:text="${comentario.comentario}">Comentario</p>
+                                    <p><strong>Calificación:</strong> <span th:text="${comentario.calificacion}">5</span> estrellas</p>
+                                    <small class="text-muted" th:text="${#dates.format(comentario.fechaComentario, 'dd/MM/yyyy HH:mm')}">Fecha</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incluir el fragmento de footer -->
+        <footer class="footer" th:include="~{fragments/footer :: footer}"></footer>
+    </section>
+    
+    <!-- Scripts de Bootstrap y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

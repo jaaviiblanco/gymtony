@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -23,9 +24,9 @@ import lombok.NonNull;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "role", visible = true)
 @JsonSubTypes({
-    @Type(value = Monitor.class, name = Usuario.MONITOR),
-    @Type(value = Responsable.class, name = Usuario.RESPONSABLE),
-    @Type(value = Cliente.class, name = Usuario.CLIENTE)
+    @Type(value = Monitor.class, name = Usuario.monitor),
+    @Type(value = Responsable.class, name = Usuario.responsable),
+    @Type(value = Cliente.class, name = Usuario.cliente)
 })
 @Data
 @NoArgsConstructor
@@ -38,12 +39,17 @@ public abstract class Usuario implements UserDetails, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String MONITOR = "monitor";
-    public static final String RESPONSABLE = "responsable";
-    public static final String CLIENTE = "cliente";
+    public static final String monitor = "monitor";
+    public static final String responsable = "responsable";
+    public static final String cliente = "cliente";
 
     public enum Role {
-        MONITOR, RESPONSABLE, CLIENTE
+        monitor, responsable, cliente;
+        
+    	@JsonCreator
+        public static Role fromString(String value) {
+            return Role.valueOf(value.toUpperCase());
+        }
     }
 
     @Id
@@ -88,7 +94,7 @@ public abstract class Usuario implements UserDetails, Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", insertable = false, updatable = false)
-    private Role role = Role.CLIENTE; // ✅ Cliente por defecto
+    private Role role = Role.cliente; // ✅ Cliente por defecto
     
     @Transient  // Esto indica que no se persiste en la base de datos
     private String confirmPassword;
@@ -104,7 +110,7 @@ public abstract class Usuario implements UserDetails, Serializable {
         this.dni = dni;
         this.email = email;
         this.age = age;
-        this.role = role != null ? role : Role.CLIENTE; // Evita valores nulos
+        this.role = role != null ? role : Role.cliente; // Evita valores nulos
     }
 
     @Override

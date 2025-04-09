@@ -1,86 +1,40 @@
 -------------------------------------------------------------------------------
 Test set: cat.institutmarianao.gymtony.test.UsuarioServiceImplTest
 -------------------------------------------------------------------------------
-Tests run: 12, Failures: 10, Errors: 0, Skipped: 0, Time elapsed: 0.375 s <<< FAILURE! -- in cat.institutmarianao.gymtony.test.UsuarioServiceImplTest
-cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldAddUser -- Time elapsed: 0.266 s <<< FAILURE!
-org.opentest4j.AssertionFailedError: 
-
-expected: "hashedPassword"
- but was: "password"
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldAddUser(UsuarioServiceImplTest.java:95)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-
-cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenUserNotFoundByUsername -- Time elapsed: 0.008 s <<< FAILURE!
+Tests run: 11, Failures: 5, Errors: 0, Skipped: 0, Time elapsed: 0.323 s <<< FAILURE! -- in cat.institutmarianao.gymtony.test.UsuarioServiceImplTest
+cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenUserNotFoundByUsername -- Time elapsed: 0.211 s <<< FAILURE!
 java.lang.AssertionError: 
 
 Expecting code to raise a throwable.
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenUserNotFoundByUsername(UsuarioServiceImplTest.java:153)
+	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenUserNotFoundByUsername(UsuarioServiceImplTest.java:159)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 
-cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldGetAllClientes -- Time elapsed: 0.014 s <<< FAILURE!
-java.lang.AssertionError: 
-
-Expecting actual not to be null
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldGetAllClientes(UsuarioServiceImplTest.java:83)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-
-cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldSaveUserWithEncodedPassword -- Time elapsed: 0.003 s <<< FAILURE!
-org.opentest4j.AssertionFailedError: 
-
-expected: "hashedPassword"
- but was: "password"
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldSaveUserWithEncodedPassword(UsuarioServiceImplTest.java:165)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-
-cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldRemoveUser -- Time elapsed: 0.037 s <<< FAILURE!
+cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldRemoveUser -- Time elapsed: 0.034 s <<< FAILURE!
 Wanted but not invoked:
 usuarioRepository.delete(
-    Usuario(id=null, username=testuser, password=password, name=Test User, dni=12345678A, email=test@example.com, age=25, role=CLIENTE)
+    Usuario(id=null, username=testuser, password=password, name=Test User, dni=12345678A, email=test@example.com, age=25, role=CLIENTE, confirmPassword=null)
 );
--> at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldRemoveUser(UsuarioServiceImplTest.java:126)
+-> at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldRemoveUser(UsuarioServiceImplTest.java:132)
 
 However, there was exactly 1 interaction with this mock:
 usuarioRepository.deleteByUsername(
     "testuser"
 );
--> at cat.institutmarianao.gymtony.services.impl.UsuarioServiceImpl.remove(UsuarioServiceImpl.java:57)
+-> at cat.institutmarianao.gymtony.services.impl.UsuarioServiceImpl.remove(UsuarioServiceImpl.java:89)
 
 
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldRemoveUser(UsuarioServiceImplTest.java:126)
+	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldRemoveUser(UsuarioServiceImplTest.java:132)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 
-cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldGetAllMonitores -- Time elapsed: 0.004 s <<< FAILURE!
-java.lang.AssertionError: 
-
-Expecting actual not to be null
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldGetAllMonitores(UsuarioServiceImplTest.java:62)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-
-cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenUpdatingNonExistentUser -- Time elapsed: 0.003 s <<< FAILURE!
+cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenUpdatingNonExistentUser -- Time elapsed: 0.005 s <<< FAILURE!
 java.lang.AssertionError: 
 
 Expecting code to raise a throwable.
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenUpdatingNonExistentUser(UsuarioServiceImplTest.java:115)
+	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenUpdatingNonExistentUser(UsuarioServiceImplTest.java:121)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
@@ -89,21 +43,12 @@ cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhe
 java.lang.AssertionError: 
 
 Expecting code to raise a throwable.
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenRemovingNonExistentUser(UsuarioServiceImplTest.java:133)
+	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldThrowExceptionWhenRemovingNonExistentUser(UsuarioServiceImplTest.java:139)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 
-cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldGetAllResponsables -- Time elapsed: 0.003 s <<< FAILURE!
-java.lang.AssertionError: 
-
-Expecting actual not to be null
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldGetAllResponsables(UsuarioServiceImplTest.java:73)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-
-cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldUpdateUserAndEncryptPasswordIfChanged -- Time elapsed: 0.004 s <<< FAILURE!
+cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldUpdateUserAndEncryptPasswordIfChanged -- Time elapsed: 0.009 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 
 expected: "hashedNewPassword"
@@ -112,7 +57,7 @@ expected: "hashedNewPassword"
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
 	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
-	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldUpdateUserAndEncryptPasswordIfChanged(UsuarioServiceImplTest.java:107)
+	at cat.institutmarianao.gymtony.test.UsuarioServiceImplTest.shouldUpdateUserAndEncryptPasswordIfChanged(UsuarioServiceImplTest.java:113)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)

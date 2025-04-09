@@ -55,33 +55,33 @@ class UsuarioServiceImplTest {
     @Test
     void shouldGetAllMonitores() {
         Monitor monitor = new Monitor("monitoruser", "password", "Monitor User", "87654321B", "monitor@example.com", 30);
-        when(usuarioRepository.findByRole(Role.MONITOR)).thenReturn(List.of(monitor));
+        when(usuarioRepository.findByRole(Role.monitor)).thenReturn(List.of(monitor));
 
         List<Monitor> monitores = usuarioService.getAllMonitores();
 
         assertThat(monitores).isNotEmpty().hasSize(1);
-        verify(usuarioRepository, times(1)).findByRole(Role.MONITOR);
+        verify(usuarioRepository, times(1)).findByRole(Role.monitor);
     }
 
     @Test
     void shouldGetAllResponsables() {
         Responsable responsable = new Responsable("respuser", "password", "Responsable User", "56789012C", "resp@example.com", 40);
-        when(usuarioRepository.findByRole(Role.RESPONSABLE)).thenReturn(List.of(responsable));
+        when(usuarioRepository.findByRole(Role.responsable)).thenReturn(List.of(responsable));
 
         List<Responsable> responsables = usuarioService.getAllResponsables();
 
         assertThat(responsables).isNotEmpty().hasSize(1);
-        verify(usuarioRepository, times(1)).findByRole(Role.RESPONSABLE);
+        verify(usuarioRepository, times(1)).findByRole(Role.responsable);
     }
 
     @Test
     void shouldGetAllClientes() {
-        when(usuarioRepository.findByRole(Role.CLIENTE)).thenReturn(List.of(usuario));
+        when(usuarioRepository.findByRole(Role.cliente)).thenReturn(List.of(usuario));
 
         List<Cliente> clientes = usuarioService.getAllClientes();
 
         assertThat(clientes).isNotEmpty().hasSize(1);
-        verify(usuarioRepository, times(1)).findByRole(Role.CLIENTE);
+        verify(usuarioRepository, times(1)).findByRole(Role.cliente);
     }
 
     @Test

@@ -19,12 +19,14 @@ public class Reserva implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Relación con Cliente
     @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false)
     private Cliente cliente; // Cliente que realiza la reserva
 
+    // Relación con Clase
     @ManyToOne
-    @JoinColumn(name = "clase_id", nullable = false)
+    @JoinColumn(name = "clase_id", referencedColumnName = "id", nullable = false)
     private Clase clase; // Clase reservada
 
     @Column(nullable = false)

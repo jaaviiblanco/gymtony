@@ -17,7 +17,7 @@ public class WebSecurityConfiguration {
     protected static final String LOGIN_URL = "/login";
     protected static final String LOGIN_FAIL_URL = "/loginfailed";
     protected static final String LOGOUT_URL = "/logout";
-    protected static final String DEFAULT_SUCCESS_URL = "/home";
+    protected static final String DEFAULT_SUCCESS_URL = "/home";  // Página a la que redirigir después de un login exitoso
 
     protected static final String[] ENDPOINTS_WHITELIST = {
         "/css/**", "/images/**", LOGIN_URL, LOGIN_FAIL_URL, "/register"
@@ -47,7 +47,7 @@ public class WebSecurityConfiguration {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                .requestMatchers("/admin/**").hasAnyRole("RESPONSABLE")
+                .requestMatchers("/admin/**").hasRole("RESPONSABLE")
                 .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
@@ -58,7 +58,7 @@ public class WebSecurityConfiguration {
             )
             .logout(logout -> logout
                 .logoutUrl(LOGOUT_URL)
-                .logoutSuccessUrl(LOGIN_URL)
+                .logoutSuccessUrl(LOGIN_URL)  // Asegúrate de que redirija a /login
                 .deleteCookies("JSESSIONID")
                 .permitAll()
             );
@@ -66,4 +66,3 @@ public class WebSecurityConfiguration {
         return http.build();
     }
 }
-

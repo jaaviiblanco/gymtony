@@ -34,10 +34,11 @@ public class Clase implements Serializable {
     @NotNull
     private LocalDateTime fechaHora;
 
+    // Relación con Usuario (en lugar de Monitor específico)
     @ManyToOne
-    @JoinColumn(name = "monitor_id", nullable = false)
+    @JoinColumn(name = "monitor_id", referencedColumnName = "id", nullable = false)
     @NotNull
-    private Monitor monitor;
+    private Usuario monitor; // Cambié "Monitor" a "Usuario", según tu base de datos
 
     @Column(nullable = false)
     @Min(1) // La clase debe durar al menos 1 minuto
@@ -47,7 +48,7 @@ public class Clase implements Serializable {
     @NotBlank
     private String ubicacion;
 
-    public Clase(String nombre, String descripcion, LocalDateTime fechaHora, Monitor monitor, int duracion, String ubicacion) {
+    public Clase(String nombre, String descripcion, LocalDateTime fechaHora, Usuario monitor, int duracion, String ubicacion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fechaHora = fechaHora;
