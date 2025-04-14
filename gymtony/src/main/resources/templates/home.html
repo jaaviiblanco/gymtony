@@ -52,7 +52,7 @@
 <body>
     <section class="container">
         <!-- Incluir el fragmento de header -->
-        <header th:include="~{fragments/header :: header}"></header>
+        <header th:insert="~{fragments/header :: header}"></header>
 
         <div class="container">
             <div class="welcome-section">
@@ -117,7 +117,7 @@
         </div>
 
         <!-- Incluir el fragmento de footer -->
-        <footer class="footer" th:include="~{fragments/footer :: footer}"></footer>
+        <footer class="footer" th:insert="~{fragments/footer :: footer}"></footer>
     </section>
     
     <!-- Scripts de Bootstrap y jQuery -->

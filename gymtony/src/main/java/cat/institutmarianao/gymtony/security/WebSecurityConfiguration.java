@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import cat.institutmarianao.gymtony.repositories.UsuarioRepository;
@@ -23,25 +24,22 @@ public class WebSecurityConfiguration {
         "/css/**", "/images/**", LOGIN_URL, LOGIN_FAIL_URL, "/register"
     };
 
-    // Bean para BCryptPasswordEncoder
     @Bean
-    BCryptPasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // Bean para UserDetailsService
+
     @Bean
     UserDetailsService userDetailsService(UsuarioRepository usuarioRepository) {
         return new CustomUserDetailsService(usuarioRepository);
     }
 
-    // Bean para AuthenticationManager
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
-    // Configuración de la seguridad web
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
@@ -58,7 +56,7 @@ public class WebSecurityConfiguration {
             )
             .logout(logout -> logout
                 .logoutUrl(LOGOUT_URL)
-                .logoutSuccessUrl(LOGIN_URL)  // Asegúrate de que redirija a /login
+                .logoutSuccessUrl(LOGIN_URL)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
             );

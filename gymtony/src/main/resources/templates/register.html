@@ -97,7 +97,7 @@
                     <input type="password" class="form-control" th:field="*{confirmPassword}" th:placeholder="#{register.confirmar.contraseña}" required>
                 </div>
                 <div th:if="${param.success}" class="alert alert-success text-center mt-3">
-    				Usuario creado correctamente.
+    				Registro exitoso. Por favor, inicie sesión.
 				</div>
                 <button type="submit" class="btn btn-primary btn-block btn-login" th:text="#{register.registrarse}"></button>
                 <p class="text-center">¿Ya tienes cuenta? <a href="/login" class="btn btn-link" th:text="#{register.iniciar.sesion}"></a></p>

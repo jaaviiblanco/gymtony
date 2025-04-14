@@ -1,6 +1,5 @@
 package cat.institutmarianao.gymtony.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,32 +16,31 @@ import java.util.Optional;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public CustomAuthenticationProvider(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String rawPassword = authentication.getCredentials().toString();
 
-        // Buscar usuario en la base de datos
         Optional<Usuario> optionalUser = usuarioRepository.findByUsername(username);
-        
+
         if (optionalUser.isEmpty()) {
             throw new BadCredentialsException("Usuario no encontrado");
         }
 
         Usuario user = optionalUser.get();
 
-        // Verificar la contraseña
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             throw new BadCredentialsException("Contraseña incorrecta");
         }
 
-        // Si todo está bien, autenticamos al usuario
         return new UsernamePasswordAuthenticationToken(user, rawPassword, user.getAuthorities());
     }
 
