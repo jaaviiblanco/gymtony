@@ -3,53 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Header</title>
-    <!-- Bootstrap 5 CSS -->
+    <title>GymTony</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Estilo CSS personalizado -->
-    <link rel="stylesheet" href="/css/headerCSS.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/header.css"> <!-- Nuestro CSS personalizado -->
 </head>
 <body>
     <header th:fragment="header">
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom">
+        <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
             <div class="container">
                 <a class="navbar-brand" href="#" th:href="@{/}">
-                    <img src="../images/logo.jpg" alt="Gym Logo" height="60">
-                    GymTony
+                    <img src="../images/logo.jpg" alt="GymTony" class="img-fluid">
+                    <span>GymTony</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <i class="bi bi-list"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" th:href="@{/}"><i class="bi bi-house"></i> Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" th:href="@{/about}"><i class="bi bi-info-circle"></i> Info</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" th:href="@{/classes}"><i class="bi bi-person-arms-up"></i> Clases</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" th:href="@{/schedule}"><i class="bi bi-calendar"></i> Calendario</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" th:href="@{/contact}"><i class="bi bi-envelope"></i> Contacto</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Logout</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/}"><i class="bi bi-house"></i> Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/classes}"><i class="bi bi-person-arms-up"></i> Clases</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/schedule}"><i class="bi bi-calendar"></i> Horario</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/contact}"><i class="bi bi-envelope"></i> Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Salir</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <!-- Agregar los scripts de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

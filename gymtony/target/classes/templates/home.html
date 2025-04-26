@@ -4,125 +4,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - MyGym</title>
-    <!-- Enlaces de CSS y Bootstrap aquí -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/headerCSS.css">
-    <link rel="stylesheet" href="/css/footerCSS.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">	
+    
+    <!-- Bootstrap y CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <style>
+        :root {
+            --primary: #007bff;
+            --secondary: #6c757d;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+        
         body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
+            background-color: var(--light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-
-        .container {
-            margin-top: 50px;
+        
+        main {
+            flex: 1;
+            padding-top: 80px; /* Espacio para el header fijo */
+            padding-bottom: 40px;
         }
-
+        
         .welcome-section {
             text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .welcome-section h2 {
-            color: #333;
-        }
-
-        .card {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
             border-radius: 10px;
-            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-
+        
+        .welcome-section h2 {
+            color: var(--dark);
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .welcome-section p {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
         .card-header {
-            background-color: #007bff;
-            color: #fff;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
         }
-
+        
         .card-body {
-            background-color: #fff;
+            padding: 1.5rem;
+            font-size: 1rem;
         }
-
+        
+        .list-group-item {
+            border-left: none;
+            border-right: none;
+            padding: 1rem;
+        }
+        
         .notification {
-            color: #007bff;
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+        
+        strong {
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .text-muted {
+            color: var(--secondary) !important;
+        }
+        
+        @media (max-width: 768px) {
+            .welcome-section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                margin-bottom: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <section class="container">
-        <!-- Incluir el fragmento de header -->
-        <header th:insert="~{fragments/header :: header}"></header>
 
-        <div class="container">
-            <div class="welcome-section">
-                <h2>Bienvenido, <span th:text="${usuario.name}">Usuario</span>!</h2>
-                <p>Estamos encantados de verte de nuevo en MyGym.</p>
+    <!-- Header -->
+    <header th:insert="~{fragments/header :: header}"></header>
+
+    <!-- Contenido principal -->
+    <main class="container">
+        <div class="welcome-section">
+            <h2>Bienvenido, <span th:text="${usuario.name}">Usuario</span>!</h2>
+            <p>Estamos encantados de verte de nuevo en GymTony</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Resumen de cuenta -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-header">Tu Perfil</div>
+                    <div class="card-body">
+                        <p><strong>Usuario:</strong> <span th:text="${usuario.username}">usuario</span></p>
+                        <p><strong>Email:</strong> <span th:text="${usuario.email}">email@example.com</span></p>
+                        <p><strong>Rol:</strong> <span th:text="${usuario.role}">Cliente</span></p>
+                        <p><strong>Edad:</strong> <span th:text="${usuario.age}">25</span></p>
+                        <p><strong>DNI:</strong> <span th:text="${usuario.dni}">12345678A</span></p>
+                    </div>
+                </div>
             </div>
 
-            <div class="row">
-                <!-- Resumen de la cuenta -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Resumen de la cuenta</h5>
-                        </div>
-                        <div class="card-body">
-                            <p><strong>Nombre de usuario:</strong> <span th:text="${usuario.username}">usuario</span></p>
-                            <p><strong>Email:</strong> <span th:text="${usuario.email}">email@example.com</span></p>
-                            <p><strong>Rol:</strong> <span th:text="${usuario.role}">Cliente</span></p>
-                            <p><strong>Edad:</strong> <span th:text="${usuario.age}">25</span></p>
-                            <p><strong>DNI:</strong> <span th:text="${usuario.dni}">12345678A</span></p>
-                        </div>
+            <!-- Próximas clases -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-header">Tus Clases</div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" th:each="reserva : ${reservasConfirmadas}">
+                                <h6 class="mb-1" th:text="${reserva.clase.nombre}">Clase de Ejemplo</h6>
+                                <small class="text-muted d-block" th:text="${#dates.format(reserva.clase.fechaHora, 'EEE dd/MM HH:mm')}">Fecha y hora</small>
+                                <small th:text="${reserva.clase.ubicacion}"></small>
+                                <span class="badge bg-success float-end" th:text="${reserva.confirmada ? 'Confirmada' : 'Pendiente'}"></span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
+            </div>
 
-                <!-- Próximas clases reservadas -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Próximas clases reservadas</h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item" th:each="reserva : ${reservasConfirmadas}">
-                                    <p class="mb-0"><strong th:text="${reserva.clase.nombre}">Clase de Ejemplo</strong></p>
-                                    <small class="text-muted" th:text="${#dates.format(reserva.clase.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha y hora</small>
-                                    <p th:text="'Ubicación: ' + ${reserva.clase.ubicacion}"></p>
-                                    <p th:text="'Estado: ' + ${reserva.confirmada ? 'Confirmada' : 'Pendiente'}"></p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Comentarios recientes -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Comentarios recientes</h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item notification" th:each="comentario : ${comentariosRecientes}">
-                                    <p class="mb-0" th:text="${comentario.comentario}">Comentario</p>
-                                    <p><strong>Calificación:</strong> <span th:text="${comentario.calificacion}">5</span> estrellas</p>
-                                    <small class="text-muted" th:text="${#dates.format(comentario.fechaComentario, 'dd/MM/yyyy HH:mm')}">Fecha</small>
-                                </li>
-                            </ul>
-                        </div>
+            <!-- Comentarios recientes -->
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="card-header">Tus Comentarios</div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item notification" th:each="comentario : ${comentariosRecientes}">
+                                <p class="mb-2" th:text="${comentario.comentario}">Comentario</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating">
+                                        <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                            <i class="bi bi-star-fill" th:classappend="${i <= comentario.calificacion} ? 'text-warning' : 'text-secondary'"></i>
+                                        </span>
+                                    </div>
+                                    <small class="text-muted" th:text="${#dates.format(comentario.fechaComentario, 'dd/MM/yy')}"></small>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
+    </main>
 
-        <!-- Incluir el fragmento de footer -->
-        <footer class="footer" th:insert="~{fragments/footer :: footer}"></footer>
-    </section>
-    
-    <!-- Scripts de Bootstrap y jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Footer -->
+    <footer th:insert="~{fragments/footer :: footer}"></footer>
+
+    <!-- Scripts de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

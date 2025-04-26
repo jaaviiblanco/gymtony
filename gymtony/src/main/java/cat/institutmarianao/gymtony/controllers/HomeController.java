@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import cat.institutmarianao.gymtony.model.Cliente;
+import cat.institutmarianao.gymtony.model.Monitor;
 import cat.institutmarianao.gymtony.model.Responsable;
 import cat.institutmarianao.gymtony.services.ComentarioService;
 import cat.institutmarianao.gymtony.services.ReservaService;
@@ -31,20 +33,29 @@ public class HomeController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername(); // Obtiene el nombre de usuario
 
-            // Aquí buscamos el usuario desde tu clase responsable, monitor, cliente, etc.
-            Responsable responsable = (Responsable) usuarioService.findByUsername(username).orElse(null);
+            // Buscar el usuario
+            var usuario = usuarioService.findByUsername(username).orElse(null);
 
-            if (responsable != null) {
-                model.addAttribute("usuario", responsable); // Pasa el objeto responsable a la vista
+            if (usuario != null) {
+                model.addAttribute("usuario", usuario); // Pasamos el usuario genérico siempre
+
+                if (usuario instanceof Responsable) {
+                    model.addAttribute("tipoUsuario", "responsable");
+                } else if (usuario instanceof Monitor) {
+                    model.addAttribute("tipoUsuario", "monitor");
+                } else if (usuario instanceof Cliente) {
+                    model.addAttribute("tipoUsuario", "cliente");
+                }
             }
         }
 
         // Obtener las reservas confirmadas
-        model.addAttribute("reservasConfirmadas", reservaService.findAll()); // Si solo quieres las confirmadas, filtra aquí
+        model.addAttribute("reservasConfirmadas", reservaService.findAll());
 
         // Obtener los comentarios recientes
-        model.addAttribute("comentariosRecientes", comentarioService.findAll()); // Aquí podrías hacer un filtrado por fecha si lo necesitas
+        model.addAttribute("comentariosRecientes", comentarioService.findAll());
 
         return "home"; // Esta es la vista Thymeleaf
     }
+
 }

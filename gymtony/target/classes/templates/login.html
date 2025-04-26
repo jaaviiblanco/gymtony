@@ -4,118 +4,164 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - GymTony</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
+        :root {
+            --primary: #007bff;
+            --secondary: #6c757d;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+        
         body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-            overflow: hidden; /* Evita la barra de desplazamiento */
+            background-color: var(--light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            padding-top: 60px;
         }
-
-        .container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .login-container {
-            max-width: 400px;
+        
+        .auth-container {
+            max-width: 450px;
             width: 100%;
-            padding: 30px;
-            border-radius: 10px;
-            background-color: #fff;
-            box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
-
-        .login-container h2 {
+        
+        .brand-section {
             text-align: center;
-            margin-bottom: 30px;
-            color: #333;
+            margin-bottom: 2rem;
         }
-
-        .form-control {
-            border-radius: 25px;
-            margin-bottom: 25px;
-            border-color: #ddd;
-        }
-
-        .btn-login {
-            border-radius: 25px;
-            background-color: #007bff;
-            border-color: #007bff;
-            color: #fff;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-login:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            padding-bottom: 10px;
-            color: #777;
-        }
-
-        /* Ajuste del tamaño del logo */
+        
         .logo-img {
-            max-width: 100px; /* Tamaño uniforme para el logo */
+            width: 120px;
             height: auto;
+            margin-bottom: 1rem;
         }
-
-        /* Media queries para dispositivos móviles */
-        @media (max-width: 768px) {
-            .logo-img {
-                max-width: 100px;
+        
+        .brand-title {
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-title {
+            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid #e1e5eb;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(0,123,255,0.15);
+        }
+        
+        .btn-auth {
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+            transform: translateY(-2px);
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        .auth-link {
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 576px) {
+            .auth-container {
+                padding: 1.5rem;
+                margin: 1rem;
             }
-
-            .login-container {
-                padding: 20px;
+            
+            .logo-img {
+                width: 100px;
+            }
+            
+            .brand-title {
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="text-center">
+        <div class="brand-section">
             <img src="/images/logo.jpg" alt="Gym Logo" class="logo-img">
+            <h1 class="brand-title">GymTony</h1>
         </div>
-        <br>
-        <h1 class="mb-4 text-center"><b>GymTony</b></h1>
-        <div class="login-container">
-            <h2 th:text="#{login.iniciar.sesion}"></h2>
+        
+        <div class="auth-container">
+            <h2 class="auth-title" th:text="#{login.iniciar.sesion}">Iniciar Sesión</h2>
+            
             <form th:action="@{/login}" method="post">
-                <div class="form-group">
+                <div class="mb-3">
                     <input type="text" class="form-control" name="username" th:placeholder="#{login.usuario}" required>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <input type="password" class="form-control" name="password" th:placeholder="#{login.contrasenya}" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block btn-login" th:text="#{login.acceder}"></button>
                 
-                <!-- Mensaje de error si la autenticación falla -->
-                <div th:if="${param.error} or ${error}" class="alert alert-danger text-center mt-3">
-                    Usuario o contraseña incorrectos.
+                <button type="submit" class="btn btn-primary btn-auth w-100" th:text="#{login.acceder}">Acceder</button>
+                
+                <div th:if="${param.error} or ${error}" class="alert alert-danger mt-3">
+                    <i class="bi bi-exclamation-circle-fill"></i> Usuario o contraseña incorrectos
                 </div>
             </form>
-            <div class="text-center mt-3">
-                <span th:text="#{login.sincuenta}"></span>
-                <a href="/register" class="btn btn-link" th:text="#{login.registrarse}"></a>
+            
+            <div class="auth-footer">
+                <span th:text="#{login.sincuenta}">¿No tienes cuenta?</span>
+                <a href="/register" class="auth-link" th:text="#{login.registrarse}">Regístrate</a>
             </div>
         </div>
     </div>
-
-    <div class="footer">
-        © 2024 GymTony. Todos los derechos reservados.
-    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

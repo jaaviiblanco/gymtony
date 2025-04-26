@@ -45,9 +45,6 @@ public class RegisterController {
 
         // Crear un nuevo usuario de tipo Cliente
         Usuario nuevoUsuario = new Cliente(username, password, name, dni, email, age);
-        
-        // Encriptar la contraseña antes de guardarla
-        nuevoUsuario.setPassword(passwordEncoder.encode(password));
 
         // Guardar el nuevo usuario en la base de datos
         usuarioService.save(nuevoUsuario);
