@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clases - GymTony</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container mt-5 pt-5">
+    <h1 class="mb-4">Listado de Clases</h1>
+    
+    <!-- Botón visible solo si el usuario es responsable -->
+	<div class="mb-4" sec:authorize="hasRole('responsable')">
+	    <a th:href="@{/clases/new}" class="btn btn-primary">
+	        <i class="bi bi-plus-circle"></i> Crear nueva clase
+	    </a>
+	</div>
+
+    <div class="row">
+        <div class="col-12">
+            <ul class="list-group">
+                <li class="list-group-item" th:each="clase : ${clases}">
+                    <a th:href="@{'/clases/' + ${clase.id}}" th:text="${clase.nombre}">Nombre de la clase</a>
+                    <small class="d-block text-muted" th:text="${#dates.format(clase.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha y hora</small>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

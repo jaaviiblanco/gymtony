@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Clase - GymTony</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container mt-5 pt-5">
+    <h1 class="mb-4">Crear Nueva Clase</h1>
+
+    <form th:action="@{/clases/new}" th:object="${clase}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" th:field="*{nombre}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea th:field="*{descripcion}" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha y Hora</label>
+            <input type="datetime-local" th:field="*{fechaHora}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ubicación</label>
+            <input type="text" th:field="*{ubicacion}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Duración (minutos)</label>
+            <input type="number" th:field="*{duracion}" class="form-control" min="1" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Monitor</label>
+            <select th:field="*{monitor.id}" class="form-select" required>
+			    <option th:each="monitor : ${monitores}"
+			            th:value="${monitor.id}"
+			            th:text="${monitor.nombre}">Monitor</option>
+			</select>
+
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Crear Clase
+        </button>
+
+        <a th:href="@{/clases}" class="btn btn-secondary ms-2">
+            <i class="bi bi-arrow-left"></i> Cancelar
+        </a>
+    </form>
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

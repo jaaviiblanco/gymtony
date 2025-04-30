@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Clase - ' + ${clase.nombre}">Detalle de Clase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container mt-5 pt-5">
+    <h1 class="mb-4" th:text="${clase.nombre}">Nombre de la Clase</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Descripción</h5>
+            <p class="card-text" th:text="${clase.descripcion}">Descripción de la clase</p>
+
+            <h5 class="card-title">Fecha y Hora</h5>
+            <p class="card-text" th:text="${#dates.format(clase.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha y hora</p>
+
+            <h5 class="card-title">Ubicación</h5>
+            <p class="card-text" th:text="${clase.ubicacion}">Ubicación</p>
+
+            <h5 class="card-title">Duración</h5>
+            <p class="card-text" th:text="${clase.duracion + ' minutos'}">Duración en minutos</p>
+
+            <a th:href="@{/clases}" class="btn btn-primary mt-3">
+                <i class="bi bi-arrow-left"></i> Volver al listado
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
