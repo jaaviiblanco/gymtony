@@ -1,0 +1,121 @@
+:root {
+    --primary: #007bff;
+    --secondary: #6c757d;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --success: #28a745;
+    --danger: #dc3545;
+}
+
+/* Estructura común */
+.container-main {
+    padding-top: 80px;
+    padding-bottom: 40px;
+    min-height: calc(100vh - 120px);
+}
+
+/* Títulos */
+.page-title {
+    color: var(--dark);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary);
+}
+
+/* Cards y listados */
+.class-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.class-card:hover {
+    transform: translateY(-5px);
+}
+
+.class-list {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.class-list-item {
+    padding: 1.25rem;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: background-color 0.2s ease;
+}
+
+.class-list-item:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.class-list-item a {
+    color: var(--dark);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.class-list-item a:hover {
+    color: var(--primary);
+}
+
+.class-meta {
+    font-size: 0.9rem;
+    color: var(--secondary);
+}
+
+/* Formularios */
+.class-form {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 0.75rem;
+    border: 1px solid #e1e5eb;
+    transition: all 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem rgba(0,123,255,0.15);
+}
+
+/* Botones */
+.btn-action {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-action i {
+    margin-right: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container-main {
+        padding-top: 60px;
+        padding-bottom: 20px;
+    }
+    
+    .class-form {
+        padding: 1.5rem;
+    }
+}

@@ -3,6 +3,8 @@ package cat.institutmarianao.gymtony.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -30,15 +32,16 @@ public class Clase implements Serializable {
     @NotBlank
     private String descripcion;
 
-    @Column(nullable = false)
+    @Column(name = "fecha_Hora", nullable = false)
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime fechaHora;
 
     // Relación con Usuario (en lugar de Monitor específico)
     @ManyToOne
     @JoinColumn(name = "monitor_id", referencedColumnName = "id", nullable = false)
     @NotNull
-    private Usuario monitor; // Cambié "Monitor" a "Usuario", según tu base de datos
+    private Monitor monitor;
 
     @Column(nullable = false)
     @Min(1) // La clase debe durar al menos 1 minuto
@@ -48,7 +51,7 @@ public class Clase implements Serializable {
     @NotBlank
     private String ubicacion;
 
-    public Clase(String nombre, String descripcion, LocalDateTime fechaHora, Usuario monitor, int duracion, String ubicacion) {
+    public Clase(String nombre, String descripcion, LocalDateTime fechaHora, Monitor monitor, int duracion, String ubicacion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fechaHora = fechaHora;

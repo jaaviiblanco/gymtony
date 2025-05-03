@@ -45,7 +45,8 @@ public class WebSecurityConfiguration {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                .requestMatchers("/admin/**").hasRole("RESPONSABLE")
+                .requestMatchers("/admin/**", "/clases/*/delete").hasRole("RESPONSABLE")
+                .requestMatchers("/clases/**").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
