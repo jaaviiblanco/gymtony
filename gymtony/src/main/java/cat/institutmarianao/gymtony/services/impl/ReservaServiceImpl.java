@@ -80,5 +80,9 @@ public class ReservaServiceImpl implements ReservaService {
     public boolean estaReservadaPorUsuario(@NotNull Long claseId, @NotNull String username) {
         return reservaRepository.existsByClaseIdAndClienteUsername(claseId, username);
     }
+    
+    public List<Reserva> findByCliente(Cliente cliente) {
+    	return reservaRepository.findByCliente(cliente);
+    }
 }
 

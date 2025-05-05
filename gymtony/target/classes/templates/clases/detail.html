@@ -27,12 +27,6 @@
 
     <div class="class-card">
         <div class="class-card-body">
-
-            <!-- Mensaje de reserva exitosa -->
-            <div th:if="${param.reservaExitosa}" class="alert alert-success">
-                ¡Reserva realizada con éxito!
-            </div>
-
             <div class="detail-section">
                 <h3><i class="bi bi-card-text"></i> Descripción</h3>
                 <div class="detail-content" th:text="${clase.descripcion}"></div>
@@ -61,23 +55,18 @@
             </div>
 
             <div class="action-buttons" sec:authorize="hasRole('cliente')">
-			    <!-- Botón de cancelar reserva: -->
-			    <div th:if="${not #lists.isEmpty(clienteReservas)}">
-			        <form th:action="@{/reservas/cancelar/{id}(id=${reserva.id})}" method="post">
-			            <button type="submit" class="btn btn-danger btn-custom">
-			                <i class="bi bi-x-circle"></i> Cancelar Reserva
-			            </button>
-			        </form>
-			    </div>
-			    <!-- Botón de reservar clase: -->
-			    <div th:if="${#lists.isEmpty(clienteReservas)}">
-			        <form th:action="@{/reservas/crear/{claseId}(claseId=${clase.id})}" method="post">
-			            <button type="submit" class="btn btn-success btn-custom">
-			                <i class="bi bi-check-circle"></i> Reservar Clase
-			            </button>
-			        </form>
-			    </div>
+			    <form th:if="${!yaReservada}" th:action="@{/reservas/crear/{claseId}(claseId=${clase.id})}" method="post">
+			        <button type="submit" class="btn btn-success btn-custom">
+			            <i class="bi bi-check-circle"></i> Reservar Clase
+			        </button>
+			    </form>
+			    <form th:if="${yaReservada}" th:action="@{/reservas/cancelar/{claseId}(claseId=${clase.id})}" method="post">
+			        <button type="submit" class="btn btn-danger btn-custom">
+			            <i class="bi bi-x-circle"></i> Cancelar Reserva
+			        </button>
+			    </form>
 			</div>
+
             <!-- Solo visible para responsable -->
             <div class="action-buttons" sec:authorize="hasRole('responsable')">
                 <a th:href="@{'/clases/edit/' + ${clase.id}}" class="btn btn-primary btn-custom">

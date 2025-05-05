@@ -3,6 +3,7 @@ package cat.institutmarianao.gymtony.controllers;
 import cat.institutmarianao.gymtony.model.Clase;
 import cat.institutmarianao.gymtony.model.Monitor;
 import cat.institutmarianao.gymtony.services.ClaseService;
+import cat.institutmarianao.gymtony.services.ReservaService;
 import cat.institutmarianao.gymtony.services.UsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.validation.Valid;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,22 +34,15 @@ public class ClaseController {
     
     @Autowired
     private UsuarioService usuarioService;
+    
+    @Autowired
+    private ReservaService reservaService;
 
     @GetMapping
     public String listarClases(Model model) {
         List<Clase> clases = claseService.findAll();
         model.addAttribute("clases", clases);
         return "clases/list";
-    }
-
-    @GetMapping("/{id}")
-    public String detalleClase(@PathVariable Long id, Model model) {
-        Optional<Clase> clase = claseService.findById(id);
-        if (clase.isEmpty()) {
-            return "redirect:/clases";
-        }
-        model.addAttribute("clase", clase.get());
-        return "clases/detail";
     }
     
     @GetMapping("/new")
@@ -106,4 +101,24 @@ public class ClaseController {
         claseService.save(clase);
         return "redirect:/clases/" + id;
     }
+    
+    @GetMapping("/{id}")
+    public String detalleClase(@PathVariable Long id, Model model, Principal principal) {
+        Optional<Clase> clase = claseService.findById(id);
+        if (clase.isEmpty()) {
+            return "redirect:/clases";
+        }
+
+        model.addAttribute("clase", clase.get());
+
+        boolean yaReservada = false;
+        if (principal != null) {
+            String username = principal.getName();
+            yaReservada = reservaService.estaReservadaPorUsuario(id, username);
+        }
+        model.addAttribute("yaReservada", yaReservada);
+
+        return "clases/detail";
+    }
+
 }

@@ -44,14 +44,18 @@ public class HomeController {
                 } else if (usuario instanceof Cliente) {
                     model.addAttribute("tipoUsuario", "cliente");
                 }
+
+                if (usuario instanceof Cliente) {
+                    Cliente cliente = (Cliente) usuario;
+                    model.addAttribute("reservasConfirmadas", reservaService.findByCliente(cliente));
+                }
             }
         }
-
-        model.addAttribute("reservasConfirmadas", reservaService.findAll());
 
         model.addAttribute("comentariosRecientes", comentarioService.findAll());
 
         return "home";
     }
+
 
 }

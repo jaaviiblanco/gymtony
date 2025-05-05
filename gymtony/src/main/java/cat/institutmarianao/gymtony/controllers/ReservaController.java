@@ -45,14 +45,11 @@ public class ReservaController {
 
 
 
-    @PostMapping("/cancelar/{id}")
-    public String cancelarReserva(@PathVariable @NotNull @Positive Long id, Principal principal) {
-        Reserva reserva = reservaService.getById(id);
-
-        if (reserva.getCliente().getUsername().equals(principal.getName())) {
-            reservaService.deleteById(id);
-        }
-
+    @PostMapping("/cancelar/{claseId}")
+    public String cancelarReserva(@PathVariable @NotNull @Positive Long claseId, Principal principal) {
+        String username = principal.getName();
+        reservaService.cancelar(claseId, username);
         return "redirect:/clases?reservaCancelada=true";
     }
+
 }

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - GymTony</title>
-    
-    <!-- Bootstrap y CSS -->
+
+    <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
@@ -14,76 +14,102 @@
 </head>
 <body>
 
-    <!-- Header -->
-    <header th:insert="~{fragments/header :: header}"></header>
+<header th:insert="~{fragments/header :: header}"></header>
 
-    <!-- Contenido principal -->
-    <main class="container">
-        <div class="welcome-section">
-            <h2>Bienvenido/a, <span th:text="${usuario.name}">Usuario</span>!</h2>
-            <p>Estamos encantados de verte de nuevo en GymTony</p>
+<main class="container">
+    <div class="welcome-section">
+        <h2>Bienvenido/a, <span th:text="${usuario.name}">Usuario</span>!</h2>
+        <p>Estamos encantados de verte de nuevo en GymTony</p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Perfil -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card">
+                <div class="card-header">Tu Perfil</div>
+                <div class="card-body">
+                    <p><strong>Usuario:</strong> <span th:text="${usuario.username}">usuario</span></p>
+                    <p><strong>Email:</strong> <span th:text="${usuario.email}">email@example.com</span></p>
+                    <p><strong>Rol:</strong> <span th:text="${usuario.role}">Rol</span></p>
+                    <p><strong>Edad:</strong> <span th:text="${usuario.age}">25</span></p>
+                    <p><strong>DNI:</strong> <span th:text="${usuario.dni}">12345678A</span></p>
+                </div>
+            </div>
         </div>
 
-        <div class="row g-4">
-            <!-- Resumen de cuenta -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-header">Tu Perfil</div>
-                    <div class="card-body">
-                        <p><strong>Usuario:</strong> <span th:text="${usuario.username}">usuario</span></p>
-                        <p><strong>Email:</strong> <span th:text="${usuario.email}">email@example.com</span></p>
-                        <p><strong>Rol:</strong> <span th:text="${usuario.role}">Cliente</span></p>
-                        <p><strong>Edad:</strong> <span th:text="${usuario.age}">25</span></p>
-                        <p><strong>DNI:</strong> <span th:text="${usuario.dni}">12345678A</span></p>
-                    </div>
+        <!-- Tus Clases (solo para clientes) -->
+        <div class="col-lg-4 col-md-6" sec:authorize="hasRole('cliente')">
+            <div class="card">
+                <div class="card-header">Tus Clases</div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="reserva : ${reservasConfirmadas}">
+                            <h6 class="mb-1" th:text="${reserva.clase.nombre}">Clase</h6>
+                            <small class="text-muted d-block" th:text="${#temporals.format(reserva.clase.fechaHora, 'EEE dd/MM HH:mm')}">Fecha</small>
+                            <small th:text="${reserva.clase.ubicacion}"></small>
+                            <span class="badge bg-success float-end" th:text="${reserva.confirmada ? 'Confirmada' : 'Pendiente'}"></span>
+                        </li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
-            <!-- Próximas clases -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-header">Tus Clases</div>
-                    <div class="card-body p-0">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item" th:each="reserva : ${reservasConfirmadas}">
-                                <h6 class="mb-1" th:text="${reserva.clase.nombre}">Clase de Ejemplo</h6>
-                                <small class="text-muted d-block" th:text="${#temporals.format(reserva.clase.fechaHora, 'EEE dd/MM HH:mm')}">Fecha y hora</small>
-                                <small th:text="${reserva.clase.ubicacion}"></small>
-                                <span class="badge bg-success float-end" th:text="${reserva.confirmada ? 'Confirmada' : 'Pendiente'}"></span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Comentarios recientes -->
-            <div class="col-lg-4 col-md-12">
-                <div class="card">
-                    <div class="card-header">Tus Comentarios</div>
-                    <div class="card-body p-0">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item notification" th:each="comentario : ${comentariosRecientes}">
-                                <p class="mb-2" th:text="${comentario.comentario}">Comentario</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="rating">
-                                        <span th:each="i : ${#numbers.sequence(1, 5)}">
-                                            <i class="bi bi-star-fill" th:classappend="${i <= comentario.calificacion} ? 'text-warning' : 'text-secondary'"></i>
-                                        </span>
-                                    </div>
-                                    <small class="text-muted" th:text="${#dates.format(comentario.fechaComentario, 'dd/MM/yy')}"></small>
+        <!-- Tus Comentarios (solo para clientes) -->
+        <div class="col-lg-4 col-md-12" sec:authorize="hasRole('cliente')">
+            <div class="card">
+                <div class="card-header">Tus Comentarios</div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item notification" th:each="comentario : ${comentariosRecientes}">
+                            <p class="mb-2" th:text="${comentario.comentario}">Comentario</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="rating">
+                                    <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                        <i class="bi bi-star-fill" th:classappend="${i <= comentario.calificacion} ? 'text-warning' : 'text-secondary'"></i>
+                                    </span>
                                 </div>
-                            </li>
-                        </ul>
-                    </div>
+                                <small class="text-muted" th:text="${#dates.format(comentario.fechaComentario, 'dd/MM/yy')}"></small>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer th:insert="~{fragments/footer :: footer}"></footer>
+        <!-- Gestión Clases (solo para responsables) -->
+        <div class="col-lg-4 col-md-6" sec:authorize="hasRole('responsable')">
+            <div class="card">
+                <div class="card-header">Gestionar Clases</div>
+                <div class="card-body">
+                    <p>Aquí puedes ver, crear o modificar las clases del gimnasio.</p>
+                    <a href="/clases" class="btn btn-light">Ir a gestión</a>
+                </div>
+            </div>
+        </div>
 
-    <!-- Scripts de Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Todas las Reseñas (solo para responsables) -->
+        <div class="col-lg-4 col-md-6" sec:authorize="hasRole('responsable')">
+            <div class="card text-bg-light">
+                <div class="card-header">Comentarios Recientes</div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="comentario : ${comentariosRecientes}">
+                            <strong th:text="${comentario.autor.name}">Nombre</strong> —
+                            <span th:text="${comentario.comentario}">Comentario</span>
+                            <br />
+                            <small th:text="${#dates.format(comentario.fechaComentario, 'dd/MM/yyyy')}"></small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer th:insert="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

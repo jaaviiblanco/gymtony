@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import cat.institutmarianao.gymtony.model.Cliente;
 import cat.institutmarianao.gymtony.model.Reserva;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -25,5 +26,7 @@ public interface ReservaService {
     void cancelar(@NotNull Long claseId, @NotNull String username);
 
     boolean estaReservadaPorUsuario(@NotNull Long claseId, @NotNull String username);
+
+    public List<Reserva> findByCliente(Cliente cliente);
 
 }

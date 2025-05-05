@@ -22,6 +22,10 @@
     <div th:if="${param.reservaExitosa}" class="alert alert-success">
         ¡Reserva realizada con éxito!
     </div>
+    
+    <div th:if="${param.reservaCancelada}" class="alert alert-danger">
+    	¡Reserva cancelada con éxito!
+	</div>
 
     <!-- Botón visible solo si el usuario es responsable -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -118,6 +122,28 @@
             }
         });
     });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        var reservaExitosa = document.querySelector('.alert-success');
+        var reservaCancelada = document.querySelector('.alert-danger');
+
+        setTimeout(function() {
+            if (reservaExitosa) {
+                reservaExitosa.classList.add('fade-out'); 
+                setTimeout(function() {
+                    reservaExitosa.style.display = 'none'; 
+                }, 1000);
+            }
+
+            if (reservaCancelada) {
+                reservaCancelada.classList.add('fade-out');
+                setTimeout(function() {
+                    reservaCancelada.style.display = 'none';
+                }, 1000); 
+            }
+        }, 3000);
+    });
+
 </script>
 </body>
 </html>

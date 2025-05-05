@@ -1,54 +1,47 @@
 package cat.institutmarianao.gymtony.controllers;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import cat.institutmarianao.gymtony.model.Comentario;
 import cat.institutmarianao.gymtony.services.ComentarioService;
 
-@RestController
+@Controller
 @RequestMapping("/comentarios")
 public class ComentarioController {
 
     @Autowired
     private ComentarioService comentarioService;
 
-    @GetMapping
-    public List<Comentario> findAll() {
-        return comentarioService.findAll();
+    @GetMapping("/all")
+    public String getComentarios(Model model) {
+        model.addAttribute("comentarios", comentarioService.findAll());
+        return "comentarios";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Comentario> findById(@PathVariable Long id) {
-        Optional<Comentario> comentario = comentarioService.findById(id);
-        return comentario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public Comentario save(@RequestBody Comentario comentario) {
-        return comentarioService.save(comentario);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        comentarioService.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    // Filtrar comentarios por cliente
     @GetMapping("/cliente/{clienteId}")
-    public List<Comentario> findByCliente(@PathVariable Long clienteId) {
-        return comentarioService.findByClienteId(clienteId);
+    public String getComentariosByCliente(@PathVariable Long clienteId, Model model) {
+        model.addAttribute("comentarios", comentarioService.findByClienteId(clienteId));
+        return "comentarios";
     }
 
-    // Filtrar comentarios por calificación
     @GetMapping("/calificacion/{calificacion}")
-    public List<Comentario> findByCalificacion(@PathVariable int calificacion) {
-        return comentarioService.findByCalificacion(calificacion);
+    public String getComentariosByCalificacion(@PathVariable int calificacion, Model model) {
+        model.addAttribute("comentarios", comentarioService.findByCalificacion(calificacion));
+        return "comentarios";
+    }
+
+    @GetMapping("/new")
+    public String crearComentarioForm(Model model) {
+        model.addAttribute("comentario", new Comentario());
+        return "resenyas";
+    }
+
+    @PostMapping("/new")
+    public String crearComentario(@ModelAttribute Comentario comentario) {
+        comentarioService.save(comentario);
+        return "redirect:/comentarios/all";
     }
 }
-
