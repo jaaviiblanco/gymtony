@@ -38,7 +38,8 @@ public class Reserva implements Serializable {
     public Reserva(Cliente cliente, Clase clase, LocalDateTime fechaReserva) {
         this.cliente = cliente;
         this.clase = clase;
-        this.fechaReserva = fechaReserva;
-        this.confirmada = false; // Inicialmente, la reserva no está confirmada
+        this.fechaReserva = (fechaReserva != null) ? fechaReserva : LocalDateTime.now();
+        this.confirmada = false; 
     }
+
 }

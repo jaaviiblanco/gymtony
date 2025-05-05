@@ -20,4 +20,10 @@ public interface ReservaService {
 
     void deleteById(@NotNull Long id);
 
+    void reservar(@NotNull Long claseId, @NotNull String username);
+
+    void cancelar(@NotNull Long claseId, @NotNull String username);
+
+    boolean estaReservadaPorUsuario(@NotNull Long claseId, @NotNull String username);
+
 }

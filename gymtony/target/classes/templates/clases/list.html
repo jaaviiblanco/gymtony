@@ -18,6 +18,11 @@
 <main class="container container-main">
     <h1 class="page-title">Listado de Clases</h1>
     
+    <!-- Mensaje de reserva exitosa -->
+    <div th:if="${param.reservaExitosa}" class="alert alert-success">
+        ¡Reserva realizada con éxito!
+    </div>
+
     <!-- Botón visible solo si el usuario es responsable -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div sec:authorize="hasRole('responsable')">

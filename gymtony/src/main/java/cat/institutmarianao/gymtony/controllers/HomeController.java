@@ -28,16 +28,14 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(Model model, Authentication authentication) {
-        // Obtener los datos del usuario actual (si está autenticado)
         if (authentication != null) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername(); // Obtiene el nombre de usuario
+            String username = userDetails.getUsername();
 
-            // Buscar el usuario
             var usuario = usuarioService.findByUsername(username).orElse(null);
 
             if (usuario != null) {
-                model.addAttribute("usuario", usuario); // Pasamos el usuario genérico siempre
+                model.addAttribute("usuario", usuario);
 
                 if (usuario instanceof Responsable) {
                     model.addAttribute("tipoUsuario", "responsable");
@@ -49,13 +47,11 @@ public class HomeController {
             }
         }
 
-        // Obtener las reservas confirmadas
         model.addAttribute("reservasConfirmadas", reservaService.findAll());
 
-        // Obtener los comentarios recientes
         model.addAttribute("comentariosRecientes", comentarioService.findAll());
 
-        return "home"; // Esta es la vista Thymeleaf
+        return "home";
     }
 
 }
