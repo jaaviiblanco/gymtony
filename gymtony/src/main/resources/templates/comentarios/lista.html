@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comentarios - GymTony</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/comentarios.css">
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
+
+<main class="container container-main">
+    <h1 class="page-title">Reseñas de Clientes</h1>
+    
+    <!-- Mensajes de éxito -->
+    <div th:if="${param.comentarioCreado}" class="alert alert-success">
+        ¡Reseña creada con éxito!
+    </div>
+    
+    <div th:if="${param.comentarioEliminado}" class="alert alert-danger">
+        ¡Reseña eliminada con éxito!
+    </div>
+
+    <!-- Botón solo para clientes -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div sec:authorize="hasRole('cliente')">
+            <a th:href="@{/comentarios/new}" class="btn btn-primary btn-action">
+                <i class="bi bi-plus-circle"></i> Nueva reseña
+            </a>
+        </div>
+    </div>
+
+    <div class="class-card">
+        <ul class="list-group class-list">
+            <li class="list-group-item class-list-item" th:each="comentario : ${comentarios}">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <b><span th:text="${comentario.cliente.nombre}"></span></b>
+                        <div class="class-meta">
+                            <span th:text="${#temporals.format(comentario.fechaComentario, 'dd/MM/yyyy HH:mm')}"></span>
+                        </div>
+                        <p class="mt-2 mb-2" th:text="${comentario.comentario}"></p>
+                        <div class="rating">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <i class="bi" th:classappend="${i <= comentario.calificacion} ? 'bi-star-fill text-warning' : 'bi-star text-secondary'"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <!-- Botón de eliminar, visible solo para el autor o responsable -->
+                        <div sec:authorize="hasAnyRole('responsable', 'cliente')">
+                            <button th:if="${comentario.cliente.username == authentication.principal.username} or hasRole('responsable')"
+                                    class="btn btn-danger btn-sm me-2" 
+                                    th:attr="data-id=${comentario.id}" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteModal" 
+                                    onclick="event.stopPropagation();">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar esta reseña? Esta acción no se puede deshacer.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-arrow-left"></i> Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn"><i class="bi bi-trash"></i> Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // JavaScript para manejar el modal y la eliminación
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteModal = document.getElementById('deleteModal');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        let comentarioIdToDelete = null;
+
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            comentarioIdToDelete = button.getAttribute('data-id'); 
+        });
+
+        confirmDeleteBtn.addEventListener('click', function () {
+            if (comentarioIdToDelete) {
+                fetch('/comentarios/' + comentarioIdToDelete, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = '/comentarios';
+                    } else {
+                        alert('Error al eliminar la reseña');
+                    }
+                    bootstrap.Modal.getInstance(deleteModal).hide();
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al eliminar la reseña');
+                    bootstrap.Modal.getInstance(deleteModal).hide();
+                });
+            }
+        });
+    });
+    
+    // Ocultar mensajes después de 3 segundos
+    document.addEventListener('DOMContentLoaded', function() {
+        var mensajeExito = document.querySelector('.alert-success');
+        var mensajeError = document.querySelector('.alert-danger');
+
+        setTimeout(function() {
+            if (mensajeExito) {
+                mensajeExito.classList.add('fade-out'); 
+                setTimeout(function() {
+                    mensajeExito.style.display = 'none'; 
+                }, 1000);
+            }
+
+            if (mensajeError) {
+                mensajeError.classList.add('fade-out');
+                setTimeout(function() {
+                    mensajeError.style.display = 'none';
+                }, 1000); 
+            }
+        }, 3000);
+    });
+</script>
+</body>
+</html>

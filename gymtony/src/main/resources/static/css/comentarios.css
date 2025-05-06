@@ -1,0 +1,93 @@
+:root {
+    --primary: #007bff;
+    --secondary: #6c757d;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --success: #28a745;
+    --danger: #dc3545;
+}
+
+/* Estructura común */
+.container-main {
+    padding-top: 80px;
+    padding-bottom: 40px;
+    min-height: calc(100vh - 120px);
+}
+
+/* Títulos */
+.page-title {
+    color: var(--dark);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary);
+}
+
+/* Cards y listados */
+.class-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.class-list {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.class-list-item {
+    padding: 1.25rem;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: background-color 0.2s ease;
+}
+
+.class-list-item:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.class-meta {
+    font-size: 0.9rem;
+    color: var(--secondary);
+}
+
+/* Estrellas de valoración */
+.rating {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+/* Botones */
+.btn-action {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-action i {
+    margin-right: 8px;
+}
+
+/* Transiciones para mensajes */
+.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .container-main {
+        padding-top: 60px;
+        padding-bottom: 20px;
+    }
+    
+    .class-list-item {
+        padding: 1rem;
+    }
+    
+    .rating {
+        font-size: 1rem;
+    }
+}

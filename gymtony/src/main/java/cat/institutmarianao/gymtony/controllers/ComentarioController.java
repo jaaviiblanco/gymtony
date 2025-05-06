@@ -1,10 +1,14 @@
 package cat.institutmarianao.gymtony.controllers;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import cat.institutmarianao.gymtony.model.Cliente;
 import cat.institutmarianao.gymtony.model.Comentario;
 import cat.institutmarianao.gymtony.services.ComentarioService;
 
@@ -15,33 +19,26 @@ public class ComentarioController {
     @Autowired
     private ComentarioService comentarioService;
 
-    @GetMapping("/all")
-    public String getComentarios(Model model) {
-        model.addAttribute("comentarios", comentarioService.findAll());
-        return "comentarios";
-    }
-
-    @GetMapping("/cliente/{clienteId}")
-    public String getComentariosByCliente(@PathVariable Long clienteId, Model model) {
-        model.addAttribute("comentarios", comentarioService.findByClienteId(clienteId));
-        return "comentarios";
-    }
-
-    @GetMapping("/calificacion/{calificacion}")
-    public String getComentariosByCalificacion(@PathVariable int calificacion, Model model) {
-        model.addAttribute("comentarios", comentarioService.findByCalificacion(calificacion));
-        return "comentarios";
-    }
-
+    // Mostrar formulario de nuevo comentario
     @GetMapping("/new")
-    public String crearComentarioForm(Model model) {
+    public String mostrarFormularioComentario(Model model) {
         model.addAttribute("comentario", new Comentario());
-        return "resenyas";
+        return "comentarios/formulario";
     }
 
+    // Guardar comentario
     @PostMapping("/new")
-    public String crearComentario(@ModelAttribute Comentario comentario) {
+    public String guardarComentario(@ModelAttribute Comentario comentario, @AuthenticationPrincipal Cliente clienteAutenticado) {
+        comentario.setCliente(clienteAutenticado); 
+        comentario.setFechaComentario(LocalDateTime.now());
         comentarioService.save(comentario);
-        return "redirect:/comentarios/all";
+        return "redirect:/comentarios";
+    }
+
+    // Mostrar lista de comentarios
+    @GetMapping
+    public String listarComentarios(Model model) {
+        model.addAttribute("comentarios", comentarioService.findAll());
+        return "comentarios/lista";
     }
 }
