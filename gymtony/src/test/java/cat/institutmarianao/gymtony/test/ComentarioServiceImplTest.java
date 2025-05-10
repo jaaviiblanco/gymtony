@@ -71,10 +71,10 @@ public class ComentarioServiceImplTest {
     void testFindByIdExists() {
         when(comentarioRepository.findById(1L)).thenReturn(Optional.of(comentario1));
 
-        Optional<Comentario> result = comentarioService.findById(1L);
+        Optional<Comentario> result = Optional.ofNullable(comentarioService.findById(1L));
 
         assertTrue(result.isPresent());
-        assertEquals("Buen gimnasio", result.get().getComentario());
+        assertEquals("Buen gimnasio", result.get().getTexto());
         verify(comentarioRepository, times(1)).findById(1L);
     }
 
@@ -82,7 +82,7 @@ public class ComentarioServiceImplTest {
     void testFindByIdNotExists() {
         when(comentarioRepository.findById(99L)).thenReturn(Optional.empty());
 
-        Optional<Comentario> result = comentarioService.findById(99L);
+        Optional<Comentario> result = Optional.ofNullable(comentarioService.findById(99L));
 
         assertFalse(result.isPresent());
         verify(comentarioRepository, times(1)).findById(99L);
@@ -95,7 +95,7 @@ public class ComentarioServiceImplTest {
         Comentario savedComentario = comentarioService.save(comentario1);
 
         assertNotNull(savedComentario);
-        assertEquals("Buen gimnasio", savedComentario.getComentario());
+        assertEquals("Buen gimnasio", savedComentario.getTexto());
         verify(comentarioRepository, times(1)).save(comentario1);
     }
 
@@ -125,7 +125,7 @@ public class ComentarioServiceImplTest {
         List<Comentario> result = comentarioService.findByCalificacion(5);
 
         assertEquals(1, result.size());
-        assertEquals("Buen gimnasio", result.get(0).getComentario());
+        assertEquals("Buen gimnasio", result.get(0).getTexto());
         verify(comentarioRepository, times(1)).findByCalificacion(5);
     }
 }

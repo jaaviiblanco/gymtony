@@ -21,17 +21,35 @@
             <i class="bi bi-chat-square-text"></i> Nueva Reseña
         </h1>        
         <form th:action="@{/comentarios/new}" th:object="${comentario}" method="post">
+
+            <!-- Selector de clase -->
+            <div class="mb-4">
+                <label for="clase" class="form-label">
+                    <i class="bi bi-easel-fill"></i> Clase
+                </label>
+                <select id="clase" class="form-select" th:field="*{clase.id}" required>
+                    <option value="" disabled selected>Selecciona una clase</option>
+                    <option th:each="clase : ${clases}" 
+                            th:value="${clase.id}" 
+                            th:text="${clase.nombre}">Clase</option>
+                </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('clase')}" 
+                     th:errors="*{clase}">Selecciona una clase</div>
+            </div>
+
+            <!-- Comentario -->
             <div class="mb-4">
                 <label for="comentario" class="form-label">
                     <i class="bi bi-chat-left-text"></i> Comentario
                 </label>
                 <textarea id="comentario" class="form-control" 
-                          th:field="*{comentario}" rows="5" required
+                          th:field="*{texto}" rows="5" required
                           placeholder="Escribe tu experiencia en la clase..."></textarea>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('comentario')}" 
-                     th:errors="*{comentario}">Error en el comentario</div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('texto')}" 
+                     th:errors="*{texto}">Error en el comentario</div>
             </div>
             
+            <!-- Calificación -->
             <div class="mb-4">
                 <label class="form-label">
                     <i class="bi bi-star-fill"></i> Calificación
@@ -54,6 +72,7 @@
                 </div>
             </div>
             
+            <!-- Botones -->
             <div class="form-actions">
                 <a th:href="@{/comentarios}" class="btn btn-outline-secondary btn-form">
                     <i class="bi bi-arrow-left"></i> Cancelar

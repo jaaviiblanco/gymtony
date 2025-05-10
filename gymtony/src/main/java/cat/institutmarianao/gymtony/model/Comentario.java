@@ -28,27 +28,31 @@ public class Comentario implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     @NotNull
-    private Cliente cliente; // Cliente que realiza el comentario
+    private Cliente cliente;
 
     @Column(nullable = false, length = 500)
     @NotBlank
-    private String comentario; // Contenido del comentario
+    private String texto; 
 
     @Column(nullable = false)
     @Min(1) @Max(5)
-    private int calificacion; // Calificación de 1 a 5 estrellas
+    private int calificacion;
 
     @Column(nullable = false)
-    private LocalDateTime fechaComentario; // Fecha y hora del comentario
+    private LocalDateTime fechaComentario;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "clase_id", nullable = false)
+    private Clase clase;
 
-    public Comentario(Cliente cliente, String comentario, int calificacion) {
+
+    public Comentario(Cliente cliente, String texto, int calificacion) {
         this.cliente = cliente;
-        this.comentario = comentario;
+        this.texto = texto;
         this.calificacion = calificacion;
         this.fechaComentario = LocalDateTime.now();
     }
-
-    // Método auxiliar para establecer solo el cliente ID si es necesario
+    
     public void setClienteId(Long clienteId, ClienteRepository clienteRepository) {
         this.cliente = clienteRepository.findById(clienteId)
             .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));

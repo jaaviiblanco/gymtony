@@ -1,7 +1,6 @@
 package cat.institutmarianao.gymtony.services.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +21,8 @@ public class ComentarioServiceImpl implements ComentarioService {
     }
 
     @Override
-    public Optional<Comentario> findById(Long id) {
-        return comentarioRepository.findById(id);
+    public Comentario findById(Long id) {
+        return comentarioRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -45,4 +44,5 @@ public class ComentarioServiceImpl implements ComentarioService {
     public List<Comentario> findByCalificacion(int calificacion) {
         return comentarioRepository.findByCalificacion(calificacion);
     }
+    
 }
