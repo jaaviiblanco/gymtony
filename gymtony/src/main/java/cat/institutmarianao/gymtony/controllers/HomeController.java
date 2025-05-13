@@ -39,20 +39,22 @@ public class HomeController {
 
                 if (usuario instanceof Responsable) {
                     model.addAttribute("tipoUsuario", "responsable");
+                    model.addAttribute("comentariosRecientes", comentarioService.findAll());
+
                 } else if (usuario instanceof Monitor) {
                     model.addAttribute("tipoUsuario", "monitor");
+
                 } else if (usuario instanceof Cliente) {
                     model.addAttribute("tipoUsuario", "cliente");
-                }
 
-                if (usuario instanceof Cliente) {
                     Cliente cliente = (Cliente) usuario;
                     model.addAttribute("reservasConfirmadas", reservaService.findByCliente(cliente));
+                    model.addAttribute("comentariosRecientes", comentarioService.findByClienteId(cliente.getId()));
                 }
             }
         }
-
-        model.addAttribute("comentariosRecientes", comentarioService.findAll());
+        
+        model.addAttribute("comentariosRecientesAdmin", comentarioService.findAll());
 
         return "home";
     }

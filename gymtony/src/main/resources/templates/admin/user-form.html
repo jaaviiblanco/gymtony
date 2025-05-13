@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${usuario.id != null} ? 'Editar Usuario' : 'Nuevo Usuario'">Nuevo Usuario - GymTony</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
+
+<main class="container container-main">
+    <div class="form-card">
+        <h1 class="form-title">
+            <i class="bi bi-person-plus"></i> 
+            <span th:text="${usuario.id != null} ? 'Editar Usuario' : 'Nuevo Usuario'"></span>
+        </h1>
+        
+        <!-- Mensajes de error -->
+        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i> Por favor, corrige los errores en el formulario.
+        </div>
+        
+        <form th:action="${usuario.id != null} ? @{'/admin/users/edit/' + ${usuario.id}} : @{/admin/users/new}" 
+              th:object="${usuario}" method="post">
+            <!-- Datos básicos -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Nombre completo</label>
+                    <input type="text" id="name" class="form-control" th:field="*{name}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" 
+                         th:errors="*{name}">Error en el nombre</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="dni" class="form-label">DNI</label>
+                    <input type="text" id="dni" class="form-control" th:field="*{dni}" 
+                           pattern="^[0-9]{8}[A-Za-z]$" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" 
+                         th:errors="*{dni}">Error en el DNI (Formato: 12345678A)</div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-control" th:field="*{email}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" 
+                         th:errors="*{email}">Error en el email</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="age" class="form-label">Edad</label>
+                    <input type="number" id="age" class="form-control" th:field="*{age}" 
+                           min="16" max="120" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('age')}" 
+                         th:errors="*{age}">La edad debe estar entre 16 y 120 años</div>
+                </div>
+            </div>
+            
+            <!-- Credenciales -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="username" class="form-label">Nombre de usuario</label>
+                    <input type="text" id="username" class="form-control" th:field="*{username}" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" 
+                         th:errors="*{username}">Error en el nombre de usuario</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="password" class="form-label">
+                        <span th:text="${usuario.id != null} ? 'Nueva contraseña (opcional)' : 'Contraseña'"></span>
+                    </label>
+                    <input type="password" id="password" class="form-control" th:field="*{password}"
+                           th:attr="required=${usuario.id == null} ? 'required' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" 
+                         th:errors="*{password}">Error en la contraseña</div>
+                </div>
+            </div>
+            
+            <!-- Rol y estado -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="role" class="form-label">Rol</label>
+                    <select id="role" class="form-select" th:field="*{role}" required>
+                        <option value="CLIENTE">Cliente</option>
+                        <option value="MONITOR">Monitor</option>
+                        <option value="ADMIN">Administrador</option>
+                    </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('role')}" 
+                         th:errors="*{role}">Selecciona un rol</div>
+                </div>
+                <div class="col-md-6" th:if="${usuario.id != null}">
+                    <label class="form-label">Estado</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="enabled" th:field="*{enabled}">
+                        <label class="form-check-label" for="enabled">
+                            <span th:text="${usuario.enabled} ? 'Activo' : 'Inactivo'"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botones -->
+            <div class="form-actions">
+                <a th:href="@{/admin/users}" class="btn btn-outline-secondary btn-form">
+                    <i class="bi bi-arrow-left"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary btn-form">
+                    <i class="bi bi-save"></i> 
+                    <span th:text="${usuario.id != null} ? 'Guardar cambios' : 'Crear usuario'"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Cambiar texto del estado cuando se cambia el switch
+    document.getElementById('enabled')?.addEventListener('change', function() {
+        const label = document.querySelector('label[for="enabled"] span');
+        label.textContent = this.checked ? 'Activo' : 'Inactivo';
+    });
+</script>
+</body>
+</html>

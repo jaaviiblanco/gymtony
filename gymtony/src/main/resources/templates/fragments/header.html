@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +25,14 @@
                         <li class="nav-item"><a class="nav-link" th:href="@{/clases}"><i class="bi bi-person-arms-up"></i> Clases</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/schedule}"><i class="bi bi-calendar"></i> Horario</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/comentarios}"><i class="bi bi-envelope"></i> Comentarios</a></li>
+                        
+                        <!-- Botón de Admin (solo visible para administradores) -->
+                        <li class="nav-item" sec:authorize="hasRole('responsable')">
+                            <a class="nav-link admin-link" th:href="@{/admin/dashboard}">
+                                <i class="bi bi-shield-lock"></i> Panel Admin
+                            </a>
+                        </li>
+                        
                         <li class="nav-item"><a class="nav-link" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Salir</a></li>
                     </ul>
                 </div>

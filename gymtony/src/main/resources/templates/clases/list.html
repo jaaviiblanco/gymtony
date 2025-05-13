@@ -29,7 +29,7 @@
 
     <!-- Botón visible solo si el usuario es responsable -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div sec:authorize="hasRole('responsable')">
+        <div sec:authorize="hasAnyRole('responsable', 'monitor')">
             <a th:href="@{/clases/new}" class="btn btn-primary btn-action">
                 <i class="bi bi-plus-circle"></i> Nueva clase
             </a>

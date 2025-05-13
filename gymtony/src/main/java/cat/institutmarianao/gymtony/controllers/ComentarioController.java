@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import cat.institutmarianao.gymtony.model.Clase;
 import cat.institutmarianao.gymtony.model.Cliente;
 import cat.institutmarianao.gymtony.model.Comentario;
+import cat.institutmarianao.gymtony.model.Usuario;
 import cat.institutmarianao.gymtony.services.ClaseService;
 import cat.institutmarianao.gymtony.services.ComentarioService;
 
@@ -51,15 +53,28 @@ public class ComentarioController {
         return "comentarios/lista";
     }
 
+    @PreAuthorize("hasRole('cliente') or hasRole('responsable')")
     @DeleteMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Object> eliminarComentario(@PathVariable Long id, @AuthenticationPrincipal Cliente clienteAutenticado) {
+    public ResponseEntity<Object> eliminarComentario(@PathVariable Long id, @AuthenticationPrincipal Usuario usuarioAutenticado) {
         Comentario comentario = comentarioService.findById(id);
-        if (comentario != null && comentario.getCliente().equals(clienteAutenticado)) {
-            comentarioService.deleteById(id);
+
+        if (comentario == null) {
+            return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok().build();
+        boolean esAutor = comentario.getCliente().equals(usuarioAutenticado);
+        boolean esResponsable = usuarioAutenticado.getAuthorities().stream()
+            .anyMatch(auth -> auth.getAuthority().equals("ROLE_responsable"));
+
+        if (esAutor || esResponsable) {
+            comentarioService.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.status(403).build();
     }
+
+
 
 }

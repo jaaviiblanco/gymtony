@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - GymTony</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
+
+<main class="container container-main">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-title">
+            <i class="bi bi-people-fill"></i> Gestión de Usuarios
+        </h1>
+        <a th:href="@{/admin/users/new}" class="btn btn-primary btn-action">
+            <i class="bi bi-person-plus"></i> Nuevo Usuario
+        </a>
+    </div>
+    
+    <!-- Filtros -->
+    <div class="card filters-card mb-4">
+        <div class="card-body">
+            <form th:action="@{/admin/users}" method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label for="role" class="form-label">Rol</label>
+                    <select id="role" name="role" class="form-select">
+                        <option value="">Todos los roles</option>
+                        <option value="CLIENTE">Cliente</option>
+                        <option value="MONITOR">Monitor</option>
+                        <option value="ADMIN">Administrador</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="search" class="form-label">Buscar</label>
+                    <input type="text" id="search" name="search" class="form-control" placeholder="Nombre, email o DNI">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Lista de usuarios -->
+    <div class="users-table">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>DNI</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.name}">Nombre</td>
+                        <td th:text="${usuario.email}">email@example.com</td>
+                        <td th:text="${usuario.dni}">12345678A</td>
+                        <td>
+                            <span th:switch="${usuario.role}" class="badge role-badge">
+                                <span th:case="'CLIENTE'" class="bg-success">Cliente</span>
+                                <span th:case="'MONITOR'" class="bg-warning">Monitor</span>
+                                <span th:case="'ADMIN'" class="bg-danger">Administrador</span>
+                            </span>
+                        </td>
+                        <td>
+                            <span th:if="${usuario.enabled}" class="badge bg-success">Activo</span>
+                            <span th:unless="${usuario.enabled}" class="badge bg-secondary">Inactivo</span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a th:href="@{'/admin/users/edit/' + ${usuario.id}}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <button th:if="${usuario.enabled}" class="btn btn-sm btn-outline-danger" 
+                                        th:attr="data-id=${usuario.id}" data-bs-toggle="modal" 
+                                        data-bs-target="#deactivateModal">
+                                    <i class="bi bi-person-x"></i>
+                                </button>
+                                <button th:unless="${usuario.enabled}" class="btn btn-sm btn-outline-success" 
+                                        th:attr="data-id=${usuario.id}" data-bs-toggle="modal" 
+                                        data-bs-target="#activateModal">
+                                    <i class="bi bi-person-check"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Paginación -->
+        <nav th:if="${totalPages > 1}" aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/admin/users?page=' + ${currentPage - 1}}">Anterior</a>
+                </li>
+                <li th:each="page : ${#numbers.sequence(1, totalPages)}" 
+                    class="page-item" th:classappend="${currentPage == page} ? 'active'">
+                    <a class="page-link" th:href="@{'/admin/users?page=' + ${page}}" th:text="${page}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/admin/users?page=' + ${currentPage + 1}}">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Modal desactivar usuario -->
+    <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deactivateModalLabel">Desactivar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas desactivar este usuario? No podrá acceder al sistema hasta que sea reactivado.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form th:action="@{'/admin/users/deactivate/' + ${usuario.id}}" method="post" id="deactivateForm">
+                        <button type="submit" class="btn btn-danger">Desactivar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal activar usuario -->
+    <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="activateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="activateModalLabel">Activar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas activar este usuario? Podrá acceder al sistema inmediatamente.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form th:action="@{'/admin/users/activate/' + ${usuario.id}}" method="post" id="activateForm">
+                        <button type="submit" class="btn btn-success">Activar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Manejo de los modales
+    document.addEventListener('DOMContentLoaded', function() {
+        const deactivateModal = document.getElementById('deactivateModal');
+        const activateModal = document.getElementById('activateModal');
+        
+        deactivateModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const userId = button.getAttribute('data-id');
+            const form = document.getElementById('deactivateForm');
+            form.action = `/admin/users/deactivate/${userId}`;
+        });
+        
+        activateModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const userId = button.getAttribute('data-id');
+            const form = document.getElementById('activateForm');
+            form.action = `/admin/users/activate/${userId}`;
+        });
+    });
+</script>
+</body>
+</html>
