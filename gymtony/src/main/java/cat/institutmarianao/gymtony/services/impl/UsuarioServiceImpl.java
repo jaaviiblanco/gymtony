@@ -25,7 +25,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Obtener todos los usuarios
     @Override
     public List<Usuario> getAllUsers() {
         return usuarioRepository.findAll();
@@ -33,14 +32,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<Cliente> getAllClientes() {
-        // Obtén todos los usuarios con rol CLIENTE
         List<Usuario> usuarios = usuarioRepository.findByRole(Usuario.Role.cliente);
-        
-        // Filtra la lista para obtener solo los objetos de tipo Cliente
         List<Cliente> clientes = new ArrayList<>();
         for (Usuario usuario : usuarios) {
             if (usuario instanceof Cliente) {
-                clientes.add((Cliente) usuario);  // Safe casting después de la comprobación
+                clientes.add((Cliente) usuario);
             }
         }
         return clientes;
@@ -48,14 +44,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<Monitor> getAllMonitores() {
-        // Obtén todos los usuarios con rol MONITOR
         List<Usuario> usuarios = usuarioRepository.findByRole(Usuario.Role.monitor);
-        
-        // Filtra la lista para obtener solo los objetos de tipo Monitor
         List<Monitor> monitores = new ArrayList<>();
         for (Usuario usuario : usuarios) {
             if (usuario instanceof Monitor) {
-                monitores.add((Monitor) usuario);  // Safe casting después de la comprobación
+                monitores.add((Monitor) usuario);
             }
         }
         return monitores;
@@ -63,38 +56,31 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<Responsable> getAllResponsables() {
-        // Obtén todos los usuarios con rol RESPONSABLE
         List<Usuario> usuarios = usuarioRepository.findByRole(Usuario.Role.responsable);
-        
-        // Filtra la lista para obtener solo los objetos de tipo Responsable
         List<Responsable> responsables = new ArrayList<>();
         for (Usuario usuario : usuarios) {
             if (usuario instanceof Responsable) {
-                responsables.add((Responsable) usuario);  // Safe casting después de la comprobación
+                responsables.add((Responsable) usuario);
             }
         }
         return responsables;
     }
 
-
-    // Actualizar un usuario
     @Override
     public void update(Usuario usuario) {
         usuarioRepository.save(usuario);
     }
 
-    // Eliminar un usuario
     @Override
     public void remove(String username) {
         usuarioRepository.deleteByUsername(username);
     }
 
-    // Buscar un usuario por username
     @Override
     public Optional<Usuario> findByUsername(String username) {
         return usuarioRepository.findByUsername(username);
     }
-    
+
     public Optional<Usuario> findByDni(String dni) {
         return usuarioRepository.findByDni(dni);
     }
@@ -103,17 +89,13 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findByEmail(email);
     }
 
-    // Guardar un nuevo usuario con la contraseña encriptada
     @Override
     public void save(@Valid Usuario usuario) {
         String encodedPassword = passwordEncoder.encode(usuario.getPassword());
-        usuario.setPassword(encodedPassword); // Establece la contraseña encriptada
-
-        // Guarda el usuario en la base de datos
+        usuario.setPassword(encodedPassword);
         usuarioRepository.save(usuario);
     }
 
-    // Cargar el usuario por su username para la autenticación
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return usuarioRepository.findByUsername(username)

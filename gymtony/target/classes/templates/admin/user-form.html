@@ -75,32 +75,22 @@
                         <span th:text="${usuario.id != null} ? 'Nueva contraseña (opcional)' : 'Contraseña'"></span>
                     </label>
                     <input type="password" id="password" class="form-control" th:field="*{password}"
-                           th:attr="required=${usuario.id == null} ? 'required' : ''">
+       					th:attrappend="required=${usuario.id == null}" placeholder="Introduce una contraseña">
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" 
                          th:errors="*{password}">Error en la contraseña</div>
                 </div>
             </div>
             
-            <!-- Rol y estado -->
+            <!-- Rol -->
             <div class="row mb-4">
                 <div class="col-md-6">
                     <label for="role" class="form-label">Rol</label>
                     <select id="role" class="form-select" th:field="*{role}" required>
-                        <option value="CLIENTE">Cliente</option>
-                        <option value="MONITOR">Monitor</option>
-                        <option value="ADMIN">Administrador</option>
+                        <option value="monitor">Monitor</option>
+                        <option value="responsable">Responsable</option>
                     </select>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('role')}" 
                          th:errors="*{role}">Selecciona un rol</div>
-                </div>
-                <div class="col-md-6" th:if="${usuario.id != null}">
-                    <label class="form-label">Estado</label>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="enabled" th:field="*{enabled}">
-                        <label class="form-check-label" for="enabled">
-                            <span th:text="${usuario.enabled} ? 'Activo' : 'Inactivo'"></span>
-                        </label>
-                    </div>
                 </div>
             </div>
             
@@ -122,12 +112,5 @@
 <div th:replace="fragments/footer :: footer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Cambiar texto del estado cuando se cambia el switch
-    document.getElementById('enabled')?.addEventListener('change', function() {
-        const label = document.querySelector('label[for="enabled"] span');
-        label.textContent = this.checked ? 'Activo' : 'Inactivo';
-    });
-</script>
 </body>
 </html>

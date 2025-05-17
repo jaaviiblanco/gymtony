@@ -16,12 +16,12 @@ public interface UsuarioService extends UserDetailsService {
     List<Responsable> getAllResponsables();
     List<Cliente> getAllClientes();
 
-    void save(@Valid Usuario usuario); // Cambiar add por save
+    void save(@Valid Usuario usuario);
 
     void update(Usuario usuario);
     void remove(String username);
 
     Optional<Usuario> findByUsername(String username);
     Optional<Usuario> findByDni(String dni);
-    Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByEmail(String email);     
 }
