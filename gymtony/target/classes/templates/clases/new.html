@@ -65,6 +65,13 @@
                 </label>
                 <input type="text" th:field="*{ubicacion}" class="form-control" required>
             </div>
+            
+            <div class="mb-3">
+			    <label for="plazasMaximas" class="form-label">Plazas máximas</label>
+			    <input type="number" class="form-control" id="plazasMaximas" name="plazasMaximas"
+			           th:field="*{plazasMaximas}" min="1" required>
+			</div>
+			            
 
             <div class="mb-4">
                 <label class="form-label">

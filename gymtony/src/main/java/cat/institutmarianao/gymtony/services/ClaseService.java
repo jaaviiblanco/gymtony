@@ -1,5 +1,6 @@
 package cat.institutmarianao.gymtony.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface ClaseService {
     public Clase save(Clase clase);
 
     public void deleteById(Long id);
+
+	public Object findClasesByFecha(LocalDate diaFecha);
 }

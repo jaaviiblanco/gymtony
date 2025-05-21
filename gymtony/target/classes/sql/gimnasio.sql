@@ -4,6 +4,15 @@ CREATE DATABASE IF NOT EXISTS gimnasio CHARACTER SET utf8mb4 COLLATE utf8mb4_uni
 -- Usar la base de datos gimnasio
 USE gimnasio;
 
+-- Tabla de planes_gimnasio
+CREATE TABLE planes_gimnasio (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    precioMensual DOUBLE NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- Tabla de usuarios
 CREATE TABLE usuarios (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -15,6 +24,8 @@ CREATE TABLE usuarios (
     age INT NOT NULL CHECK (age >= 16 AND age <= 100),
     role ENUM('monitor', 'responsable', 'cliente') NOT NULL DEFAULT 'cliente',
     especialidad VARCHAR(100), -- Para monitores y responsables
+    plan_id BIGINT, -- Nuevo: relación con planes_gimnasio
+    FOREIGN KEY (plan_id) REFERENCES planes_gimnasio(id) ON DELETE SET NULL,
     CHECK (
         role IN ('monitor', 'responsable') OR especialidad IS NULL
     )
@@ -29,6 +40,7 @@ CREATE TABLE clases (
     monitor_id BIGINT NOT NULL,
     duracion INT NOT NULL CHECK (duracion >= 1), -- Duración mínima de 1 minuto
     ubicacion VARCHAR(100) NOT NULL,
+    plazasMaximas INT NOT NULL CHECK (plazasMaximas >= 1), -- Añadido campo para plazas
     FOREIGN KEY (monitor_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

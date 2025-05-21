@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horario - GymTony</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/schedule.css">
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
+
+<main class="container schedule-container">
+    <div class="schedule-header">
+        <h1 class="page-title">
+            <i class="bi bi-calendar-week"></i> Horario de Clases
+        </h1>
+        
+        <!-- Selector de semana -->
+        <div class="week-navigation">
+            <a th:href="@{'/schedule?date=' + ${#temporals.format(fechaInicio.minusDays(7), 'yyyy-MM-dd')}}"
+               class="btn btn-outline-primary">
+                <i class="bi bi-chevron-left"></i> Semana anterior
+            </a>
+            
+            <h3 class="current-week">
+                <span th:text="${#temporals.format(fechaInicio, 'dd MMM') + ' - ' + #temporals.format(fechaFin, 'dd MMM yyyy')}">
+                    1 Ene - 7 Ene 2023
+                </span>
+            </h3>
+            
+            <a th:href="@{'/schedule?date=' + ${#temporals.format(fechaInicio.plusDays(7), 'yyyy-MM-dd')}}"
+               class="btn btn-outline-primary">
+                Semana siguiente <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Calendario semanal -->
+    <div class="week-container">
+        <div th:each="dia : ${semana}" class="day-column" 
+             th:classappend="${dia.value.esHoy} ? 'today' : ''">
+            
+            <div class="day-header">
+                <div class="day-name" th:text="${#strings.capitalize(#temporals.dayOfWeekName(dia.value.fecha))}">
+                    Lunes
+                </div>
+                <div class="day-date" th:text="${#temporals.format(dia.value.fecha, 'dd/MM')}">
+                    01/01
+                </div>
+            </div>
+            
+            <div class="classes-list">
+                <div th:each="clase : ${dia.value.clases}" class="class-card" 
+                     th:onclick="'window.location.href=\'/clases/' + ${clase.id} + '\''">
+                    
+                    <div class="class-time">
+                        <i class="bi bi-clock"></i>
+                        <span th:text="${#temporals.format(clase.fechaHora, 'HH:mm')}">10:00</span>
+                    </div>
+                    
+                    <div class="class-details">
+                        <h5 th:text="${clase.nombre}">Yoga Matutino</h5>
+                        <div class="class-info">
+                            <span class="monitor" th:text="${clase.monitor.name}">
+                                <i class="bi bi-person"></i> Carlos Pérez
+                            </span>
+                            <span class="location" th:text="${clase.ubicacion}">
+                                <i class="bi bi-geo-alt"></i> Sala 3
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="class-actions">
+                        <span class="badge bg-primary" th:if="${clase.plazasDisponibles > 0}" 
+                              th:text="${clase.plazasDisponibles + ' plazas'}">
+                            5 plazas
+                        </span>
+                        <span class="badge bg-danger" th:unless="${clase.plazasDisponibles > 0}">
+                            Completo
+                        </span>
+                    </div>
+                </div>
+                
+                <div th:if="${#lists.isEmpty(dia.value.clases)}" class="no-classes">
+                    <i class="bi bi-calendar-x"></i>
+                    <span>No hay clases</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Vista móvil (día seleccionado) -->
+    <div class="mobile-day-view">
+        <h3 class="selected-day-title">
+            <i class="bi bi-calendar-date"></i>
+            <span th:text="${#strings.capitalize(#temporals.dayOfWeekName(diaSeleccionado.fecha)) + ', ' + #temporals.format(diaSeleccionado.fecha, 'dd MMMM')}">
+                Lunes, 1 Enero
+            </span>
+        </h3>
+        
+        <div class="mobile-classes">
+            <div th:each="clase : ${diaSeleccionado.clases}" class="mobile-class-card">
+                <div class="class-time-badge" 
+                     th:classappend="${#temporals.format(clase.fechaHora, 'HH:mm') < #temporals.format(#dates.createNow(), 'HH:mm')} ? 'past' : 'future'">
+                    <span th:text="${#temporals.format(clase.fechaHora, 'HH:mm')}">10:00</span>
+                </div>
+                
+                <div class="class-content">
+                    <h5 th:text="${clase.nombre}">Yoga Matutino</h5>
+                    <div class="class-meta">
+                        <span><i class="bi bi-person"></i> <span th:text="${clase.monitor.name}">Monitor</span></span>
+                        <span><i class="bi bi-geo-alt"></i> <span th:text="${clase.ubicacion}">Sala</span></span>
+                    </div>
+                    
+                    <div class="class-places">
+                        <span class="badge" 
+                              th:classappend="${clase.plazasDisponibles > 0} ? 'bg-success' : 'bg-danger'"
+                              th:text="${clase.plazasDisponibles > 0} ? (clase.plazasDisponibles + ' plazas') : 'Completo'">
+                            5 plazas
+                        </span>
+                    </div>
+                </div>
+                
+                <a th:href="@{'/clases/' + ${clase.id}}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-info-circle"></i>
+                </a>
+            </div>
+            
+            <div th:if="${#lists.isEmpty(diaSeleccionado.clases)}" class="no-classes-mobile">
+                <i class="bi bi-calendar-x"></i>
+                <p>No hay clases programadas para este día</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Resaltar el día actual al cargar
+    document.addEventListener('DOMContentLoaded', function() {
+        const todayElement = document.querySelector('.today');
+        if (todayElement) {
+            todayElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -2,6 +2,8 @@ package cat.institutmarianao.gymtony.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -37,26 +39,41 @@ public class Clase implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime fechaHora;
 
-    // Relación con Usuario (en lugar de Monitor específico)
     @ManyToOne
     @JoinColumn(name = "monitor_id", referencedColumnName = "id", nullable = false)
     @NotNull
     private Monitor monitor;
 
     @Column(nullable = false)
-    @Min(1) // La clase debe durar al menos 1 minuto
+    @Min(1)
     private int duracion;
 
     @Column(nullable = false, length = 100)
     @NotBlank
     private String ubicacion;
 
-    public Clase(String nombre, String descripcion, LocalDateTime fechaHora, Monitor monitor, int duracion, String ubicacion) {
+    // ✅ NUEVO: Número máximo de plazas
+    @Column(nullable = false)
+    @Min(1)
+    private int plazasMaximas;
+
+    // ✅ NUEVO: Lista de reservas
+    @OneToMany(mappedBy = "clase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reserva> reservas = new ArrayList<>();
+
+    // ✅ NUEVO: Método para calcular las plazas disponibles
+    @Transient
+    public int getPlazasDisponibles() {
+        return plazasMaximas - (reservas != null ? reservas.size() : 0);
+    }
+    
+    public Clase(String nombre, String descripcion, LocalDateTime fechaHora, Monitor monitor, int duracion, String ubicacion, int plazasMaximas) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fechaHora = fechaHora;
         this.monitor = monitor;
         this.duracion = duracion;
         this.ubicacion = ubicacion;
+        this.plazasMaximas = plazasMaximas;
     }
 }

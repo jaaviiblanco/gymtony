@@ -65,7 +65,6 @@ public abstract class Usuario implements UserDetails, Serializable {
 
     @JsonInclude(Include.NON_NULL)
     @Column(nullable = false)
-    @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 10, message = "La contraseña debe tener al menos 10 caracteres")
     private String password;
 
@@ -98,6 +97,10 @@ public abstract class Usuario implements UserDetails, Serializable {
     
     @Transient  // Esto indica que no se persiste en la base de datos
     private String confirmPassword;
+    
+    @ManyToOne
+    @JoinColumn(name = "plan_id")
+    private PlanGimnasio plan;
     
     // Método de validación de las contraseñas
     public boolean isPasswordValid() {

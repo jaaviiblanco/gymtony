@@ -13,18 +13,13 @@
 <body>
 
 <!-- Header -->
-<div th:replace="fragments/header :: header"></div>
+<header th:insert="~{fragments/header :: header}"></header>
 
 <main class="container container-main">
     <h1 class="page-title">
         <i class="bi bi-speedometer2"></i> Panel de Administración
     </h1>
-    
-    <!-- Acciones rápidas -->
     <div class="quick-actions mb-5">
-        <h2 class="section-title">
-            <i class="bi bi-lightning-charge"></i> Acciones Rápidas
-        </h2>
         <div class="actions-grid">
             <a th:href="@{/admin/users/new}" class="action-card">
                 <i class="bi bi-person-plus"></i>
@@ -42,26 +37,6 @@
                 <i class="bi bi-list-task"></i>
                 <span>Ver Todas las Clases</span>
             </a>
-        </div>
-    </div>
-    
-    <!-- Últimas actividades -->
-    <div class="recent-activity">
-        <h2 class="section-title">
-            <i class="bi bi-clock-history"></i> Actividad Reciente
-        </h2>
-        <div class="activity-list">
-            <div class="activity-item" th:each="actividad : ${actividadesRecientes}">
-                <div class="activity-icon" th:classappend="${actividad.tipo}">
-                    <i th:if="${actividad.tipo == 'USUARIO'}" class="bi bi-person-fill"></i>
-                    <i th:if="${actividad.tipo == 'CLASE'}" class="bi bi-calendar-event"></i>
-                    <i th:if="${actividad.tipo == 'RESERVA'}" class="bi bi-calendar-check"></i>
-                </div>
-                <div class="activity-content">
-                    <p th:text="${actividad.mensaje}">Mensaje de actividad</p>
-                    <small class="text-muted" th:text="${#temporals.format(actividad.fecha, 'dd/MM/yyyy HH:mm')}">fecha</small>
-                </div>
-            </div>
         </div>
     </div>
 </main>

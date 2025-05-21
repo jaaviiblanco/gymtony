@@ -23,5 +23,9 @@ public interface UsuarioService extends UserDetailsService {
 
     Optional<Usuario> findByUsername(String username);
     Optional<Usuario> findByDni(String dni);
-    Optional<Usuario> findByEmail(String email);     
+    Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findById(Long id);
+
+    
+    public List<Usuario> filterUsers(String role, String search);
 }

@@ -66,9 +66,21 @@ public class UsuarioServiceImpl implements UsuarioService {
         return responsables;
     }
 
-    @Override
     public void update(Usuario usuario) {
-        usuarioRepository.save(usuario);
+        Usuario existente = usuarioRepository.findById(usuario.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        existente.setUsername(usuario.getUsername());
+        existente.setName(usuario.getName());
+        existente.setDni(usuario.getDni());
+        existente.setEmail(usuario.getEmail());
+        existente.setAge(usuario.getAge());
+
+        if (usuario.getPassword() != null && !usuario.getPassword().isBlank()) {
+            existente.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        }
+
+        usuarioRepository.save(existente);
     }
 
     @Override
@@ -101,4 +113,22 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
     }
+    
+    @Override
+    public List<Usuario> filterUsers(String role, String search) {
+        return usuarioRepository.findAll().stream()
+            .filter(user -> role == null || role.isBlank() || user.getRole().name().equalsIgnoreCase(role))
+            .filter(user -> search == null || search.isBlank() ||
+                   user.getName().toLowerCase().contains(search.toLowerCase()) ||
+                   user.getEmail().toLowerCase().contains(search.toLowerCase()) ||
+                   user.getDni().toLowerCase().contains(search.toLowerCase()))
+            .toList();
+    }
+    
+    @Override
+    public Optional<Usuario> findById(Long id) {
+        return usuarioRepository.findById(id);
+    }
+
+
 }

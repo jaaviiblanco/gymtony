@@ -1,5 +1,7 @@
 package cat.institutmarianao.gymtony.services.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,13 @@ public class ClaseServiceImpl implements ClaseService {
     public void deleteById(Long id) {
     	claseRepository.deleteById(id);
     }
+
+    public List<Clase> findClasesByFecha(LocalDate diaFecha) {
+        LocalDateTime inicio = diaFecha.atStartOfDay();
+        LocalDateTime fin = diaFecha.atTime(23, 59, 59);
+        return claseRepository.findByFechaHoraBetween(inicio, fin);
+    }
+
 }
 
 
