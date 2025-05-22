@@ -11,4 +11,8 @@ import cat.institutmarianao.gymtony.model.Clase;
 public interface ClaseRepository extends JpaRepository<Clase, Long> {
 
 	List<Clase> findByFechaHoraBetween(LocalDateTime inicio, LocalDateTime fin);
+
+	List<Clase> findByMonitorId(Long monitorId);
+	
+	
 }

@@ -43,6 +43,11 @@ public class ClaseServiceImpl implements ClaseService {
         LocalDateTime fin = diaFecha.atTime(23, 59, 59);
         return claseRepository.findByFechaHoraBetween(inicio, fin);
     }
+    
+    @Override
+    public List<Clase> findByMonitorId(Long monitorId) {
+        return claseRepository.findByMonitorId(monitorId);
+    }
 
 }
 

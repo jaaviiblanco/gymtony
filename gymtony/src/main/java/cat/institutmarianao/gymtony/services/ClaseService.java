@@ -20,4 +20,6 @@ public interface ClaseService {
     public void deleteById(Long id);
 
 	public Object findClasesByFecha(LocalDate diaFecha);
+
+	List<Clase> findByMonitorId(Long monitorId);
 }

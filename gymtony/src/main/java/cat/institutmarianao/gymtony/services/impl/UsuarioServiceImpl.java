@@ -130,5 +130,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-
+    public void deleteById(Long id) {
+        usuarioRepository.deleteById(id);
+    }
 }

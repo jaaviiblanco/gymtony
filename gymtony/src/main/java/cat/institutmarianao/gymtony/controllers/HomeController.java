@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import cat.institutmarianao.gymtony.model.Cliente;
 import cat.institutmarianao.gymtony.model.Monitor;
 import cat.institutmarianao.gymtony.model.Responsable;
+import cat.institutmarianao.gymtony.services.ClaseService;
 import cat.institutmarianao.gymtony.services.ComentarioService;
 import cat.institutmarianao.gymtony.services.ReservaService;
 import cat.institutmarianao.gymtony.services.UsuarioService;
@@ -25,6 +26,9 @@ public class HomeController {
 
     @Autowired
     private UsuarioService usuarioService;
+    
+    @Autowired
+    private ClaseService claseService;
 
     @GetMapping("/home")
     public String home(Model model, Authentication authentication) {
@@ -41,9 +45,12 @@ public class HomeController {
                     model.addAttribute("tipoUsuario", "responsable");
                     model.addAttribute("comentariosRecientes", comentarioService.findAll());
 
-                } else if (usuario instanceof Monitor) {
+                } else if (usuario instanceof Monitor monitor) {
                     model.addAttribute("tipoUsuario", "monitor");
-
+                    
+                    model.addAttribute("comentariosMonitor", comentarioService.findByMonitorId(monitor.getId()));
+                    model.addAttribute("clasesMonitor", claseService.findByMonitorId(monitor.getId()));
+                    
                 } else if (usuario instanceof Cliente) {
                     model.addAttribute("tipoUsuario", "cliente");
 

@@ -24,7 +24,7 @@
             <i class="bi bi-person-plus"></i> Nuevo Usuario
         </a>
     </div>
-    
+
     <!-- Filtros -->
     <div class="card filters-card mb-4">
         <div class="card-body">
@@ -50,7 +50,7 @@
             </form>
         </div>
     </div>
-    
+
     <!-- Lista de usuarios -->
     <div class="users-table">
         <div class="table-responsive">
@@ -70,28 +70,23 @@
                         <td th:text="${usuario.email}">email@example.com</td>
                         <td th:text="${usuario.dni}">12345678A</td>
                         <td>
-						    <span th:switch="${usuario.role.name()}" class="badge role-badge">
-						        <span th:case="'cliente'" class="bg-success">Cliente</span>
-						        <span th:case="'monitor'" class="bg-warning">Monitor</span>
-						        <span th:case="'responsable'" class="bg-danger">Responsable</span>
-						        <span th:case="*">Desconocido</span>
-						    </span>
-						</td>
-
+                            <span th:switch="${usuario.role.name()}" class="badge role-badge">
+                                <span th:case="'cliente'" class="bg-success">Cliente</span>
+                                <span th:case="'monitor'" class="bg-warning">Monitor</span>
+                                <span th:case="'responsable'" class="bg-danger">Responsable</span>
+                                <span th:case="*">Desconocido</span>
+                            </span>
+                        </td>
                         <td>
                             <div class="d-flex gap-2">
                                 <a th:href="@{'/admin/users/edit/' + ${usuario.id}}" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <button th:if="${usuario.enabled}" class="btn btn-sm btn-outline-danger" 
-                                        th:attr="data-id=${usuario.id}" data-bs-toggle="modal" 
-                                        data-bs-target="#deactivateModal">
-                                    <i class="bi bi-person-x"></i>
-                                </button>
-                                <button th:unless="${usuario.enabled}" class="btn btn-sm btn-outline-success" 
-                                        th:attr="data-id=${usuario.id}" data-bs-toggle="modal" 
-                                        data-bs-target="#activateModal">
-                                    <i class="bi bi-person-check"></i>
+                                <button class="btn btn-sm btn-outline-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteUserModal"
+                                        th:attr="data-id=${usuario.id}, data-name=${usuario.name}">
+                                    <i class="bi bi-trash"></i>
                                 </button>
                             </div>
                         </td>
@@ -102,9 +97,44 @@
     </div>
 </main>
 
+<!-- Modal de eliminación -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form th:action="@{/admin/users/delete}" method="post">
+                <input type="hidden" name="id" id="delete-user-id">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUserModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que quieres eliminar al usuario <strong id="delete-user-name"></strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const deleteUserModal = document.getElementById('deleteUserModal');
+    deleteUserModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const userId = button.getAttribute('data-id');
+        const userName = button.getAttribute('data-name');
+
+        document.getElementById('delete-user-id').value = userId;
+        document.getElementById('delete-user-name').textContent = userName;
+    });
+</script>
+
 </body>
 </html>

@@ -127,4 +127,10 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
+    @PostMapping("/users/delete")
+    public String deleteUser(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        usuarioService.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente");
+        return "redirect:/admin/users";
+    }
 }

@@ -48,7 +48,17 @@
                             <h6 class="mb-1" th:text="${reserva.clase.nombre}">Clase</h6>
                             <small class="text-muted d-block" th:text="${#temporals.format(reserva.clase.fechaHora, 'EEE dd/MM HH:mm')}">Fecha</small>
                             <small th:text="${reserva.clase.ubicacion}"></small>
-                            <span class="badge bg-success float-end" th:text="${reserva.confirmada ? 'Confirmada' : 'Pendiente'}"></span>
+                            <span class="badge float-end"
+                                  th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(reserva.clase.fechaHora, T(java.time.LocalDateTime).now()) <= 7 
+                                          and T(java.time.LocalDateTime).now().isAfter(reserva.clase.fechaHora)}"
+                                  th:text="'Realizada'"
+                                  th:classappend="' bg-secondary'">
+                            </span>
+                            <span class="badge float-end"
+                                  th:if="${T(java.time.LocalDateTime).now().isBefore(reserva.clase.fechaHora)}"
+                                  th:text="'Pendiente'"
+                                  th:classappend="' bg-warning'">
+                            </span>
                         </li>
                     </ul>
                 </div>
@@ -62,7 +72,58 @@
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item notification" th:each="comentario : ${comentariosRecientes}">
-                        	<strong th:text="${comentario.cliente.name}">Nombre</strong>
+                            <strong th:text="${comentario.cliente.name}">Nombre</strong>
+                            <p class="mb-2" th:text="${comentario.texto}">Comentario</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="rating">
+                                    <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                        <i class="bi bi-star-fill" th:classappend="${i <= comentario.calificacion} ? 'text-warning' : 'text-secondary'"></i>
+                                    </span>
+                                </div>
+                                <small class="text-muted" th:text="${#temporals.format(comentario.fechaComentario, 'dd/MM/yy')}"></small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Clases asignadas a ti (solo para monitores) -->
+		<div class="col-lg-4 col-md-6" sec:authorize="hasRole('monitor')">
+		    <div class="card">
+		        <div class="card-header">Tus Clases</div>
+		        <div class="card-body p-0">
+		            <ul class="list-group list-group-flush">
+		                <li class="list-group-item" th:each="clase : ${clasesMonitor}">
+		                    <h6 class="mb-1" th:text="${clase.nombre}">Clase</h6>
+		                    <small class="text-muted d-block" th:text="${#temporals.format(clase.fechaHora, 'EEE dd/MM HH:mm')}">Fecha</small>
+		                    <small th:text="${clase.ubicacion}">Ubicación</small>
+		                    <span class="badge float-end"
+		                          th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(clase.fechaHora, T(java.time.LocalDateTime).now()) <= 7 
+		                                  and T(java.time.LocalDateTime).now().isAfter(clase.fechaHora)}"
+		                          th:text="'Realizada'"
+		                          th:classappend="' bg-secondary'">
+		                    </span>
+		                    <span class="badge float-end"
+		                          th:if="${T(java.time.LocalDateTime).now().isBefore(clase.fechaHora)}"
+		                          th:text="'Pendiente'"
+		                          th:classappend="' bg-warning'">
+		                    </span>
+		                </li>
+		            </ul>
+		        </div>
+		    </div>
+		</div>
+
+
+        <!-- Comentarios sobre tus clases (solo para monitores) -->
+        <div class="col-lg-4 col-md-12" sec:authorize="hasRole('monitor')">
+            <div class="card text-bg-light">
+                <div class="card-header">Comentarios sobre tus clases</div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item notification" th:each="comentario : ${comentariosMonitor}">
+                            <strong th:text="${comentario.cliente.name}">Nombre</strong>
                             <p class="mb-2" th:text="${comentario.texto}">Comentario</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="rating">
@@ -96,7 +157,7 @@
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item notification" th:each="comentario : ${comentariosRecientesAdmin}">
-                        	<strong th:text="${comentario.cliente.name}">Nombre</strong>
+                            <strong th:text="${comentario.cliente.name}">Nombre</strong>
                             <p class="mb-2" th:text="${comentario.texto}">Comentario</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="rating">
@@ -111,7 +172,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </main>
 

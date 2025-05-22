@@ -28,4 +28,5 @@ public interface UsuarioService extends UserDetailsService {
 
     
     public List<Usuario> filterUsers(String role, String search);
+	void deleteById(Long id);
 }

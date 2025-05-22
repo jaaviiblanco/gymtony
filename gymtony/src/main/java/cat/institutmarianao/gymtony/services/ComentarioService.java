@@ -18,6 +18,14 @@ public interface ComentarioService {
     public void deleteById(Long id);
 
     public List<Comentario> findByClienteId(Long clienteId);
+    public List<Comentario> findByMonitorId(Long monitorId);
+
 
     public List<Comentario> findByCalificacion(int calificacion);
+
+	public List<Comentario> findByClienteNameContainingIgnoreCaseAndCalificacion(String usuario, Integer calificacion);
+
+	public List<Comentario> findByClienteNameContainingIgnoreCase(String usuario);
+
+	public List<Comentario> buscarPorUsuarioYCalificacion(String usuario, Integer calificacionInt);
 }

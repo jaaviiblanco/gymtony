@@ -46,10 +46,29 @@ public class ComentarioController {
         return "redirect:/comentarios";
     }
 
-    // Mostrar lista de comentarios
     @GetMapping
-    public String listarComentarios(Model model) {
-        model.addAttribute("comentarios", comentarioService.findAll());
+    public String mostrarComentarios(@RequestParam(required = false) String usuario,
+                                     @RequestParam(required = false) String calificacion,
+                                     Model model) {
+
+        Integer calificacionInt = null;
+
+        // Validar y convertir la calificación si no es el valor especial "_"
+        if (calificacion != null && !calificacion.equals("_") && !calificacion.isBlank()) {
+            try {
+                calificacionInt = Integer.parseInt(calificacion);
+            } catch (NumberFormatException e) {
+                calificacionInt = null;
+            }
+        }
+
+        // Obtener los comentarios filtrados
+        List<Comentario> comentariosFiltrados = comentarioService.buscarPorUsuarioYCalificacion(usuario, calificacionInt);
+
+        model.addAttribute("comentarios", comentariosFiltrados);
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("calificacion", calificacionInt); // esto sirve para mantener el valor seleccionado en el <select>
+
         return "comentarios/lista";
     }
 

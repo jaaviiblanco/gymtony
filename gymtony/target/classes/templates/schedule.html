@@ -77,11 +77,16 @@
                     </div>
                     
                     <div class="class-actions">
-                        <span class="badge bg-primary" th:if="${clase.plazasDisponibles > 0}" 
+                        <span th:if="${clase.fechaHora.isBefore(#temporals.createNow())}" class="badge bg-secondary">
+                            Realizada
+                        </span>
+                        <span th:if="${!clase.fechaHora.isBefore(#temporals.createNow()) and clase.plazasDisponibles > 0}" 
+                              class="badge bg-primary" 
                               th:text="${clase.plazasDisponibles + ' plazas'}">
                             5 plazas
                         </span>
-                        <span class="badge bg-danger" th:unless="${clase.plazasDisponibles > 0}">
+                        <span th:if="${!clase.fechaHora.isBefore(#temporals.createNow()) and !(clase.plazasDisponibles > 0)}" 
+                              class="badge bg-danger">
                             Completo
                         </span>
                     </div>
@@ -119,7 +124,10 @@
                     </div>
                     
                     <div class="class-places">
-                        <span class="badge" 
+                        <span th:if="${clase.fechaHora.isBefore(#temporals.createNow())}" class="badge bg-secondary">
+                            Realizada
+                        </span>
+                        <span th:if="${!clase.fechaHora.isBefore(#temporals.createNow())}" 
                               th:classappend="${clase.plazasDisponibles > 0} ? 'bg-success' : 'bg-danger'"
                               th:text="${clase.plazasDisponibles > 0} ? (clase.plazasDisponibles + ' plazas') : 'Completo'">
                             5 plazas

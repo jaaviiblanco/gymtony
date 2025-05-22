@@ -45,4 +45,20 @@ public class ComentarioServiceImpl implements ComentarioService {
         return comentarioRepository.findByCalificacion(calificacion);
     }
     
+    @Override
+    public List<Comentario> findByMonitorId(Long monitorId) {
+        return comentarioRepository.findByMonitorId(monitorId);
+    }
+
+    public List<Comentario> findByClienteNameContainingIgnoreCaseAndCalificacion(String nombre, Integer calificacion) {
+        return comentarioRepository.findByClienteNameContainingIgnoreCaseAndCalificacion(nombre, calificacion);
+    }
+
+	public List<Comentario> findByClienteNameContainingIgnoreCase(String nombre) {
+	    return comentarioRepository.findByClienteNameContainingIgnoreCase(nombre);
+	}
+	
+	public List<Comentario> buscarPorUsuarioYCalificacion(String usuario, Integer calificacionInt) {
+		return comentarioRepository.buscarPorUsuarioYCalificacion(usuario, calificacionInt);
+	}
 }
