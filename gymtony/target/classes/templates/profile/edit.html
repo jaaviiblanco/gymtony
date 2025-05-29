@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Mi Perfil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+
+<header th:insert="~{fragments/header :: header}"></header>
+
+<main class="container py-4">
+    <div class="card profile-card">
+        <div class="card-header bg-primary text-white position-relative">
+            <h4 class="mb-0"><i class="bi bi-person-gear me-2"></i>Editar Perfil</h4>
+            <a th:href="@{/}" class="edit-btn text-white">
+                <i class="bi bi-x-lg"></i>
+            </a>
+        </div>
+        
+        <div class="card-body p-4">
+            <!-- Mensajes -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <form th:action="@{/profile/update}" method="post" class="needs-validation" novalidate>
+			    <div class="row g-3 mb-4">
+			        <div class="col-md-6">
+			            <label for="name" class="form-label">Nombre completo</label>
+			            <input type="text" class="form-control" id="name" name="name" th:value="${usuario.name}" required>
+			            <div class="invalid-feedback">Por favor ingresa tu nombre</div>
+			        </div>
+			        <div class="col-md-6">
+			            <label for="dni" class="form-label">DNI</label>
+			            <input type="text" class="form-control" id="dni" name="dni" th:value="${usuario.dni}"
+			                   pattern="^[0-9]{8}[A-Za-z]$" required>
+			            <div class="invalid-feedback">Ingresa un DNI válido (8 números + letra)</div>
+			        </div>
+			    </div>
+			
+			    <div class="row g-3 mb-4">
+			        <div class="col-md-6">
+			            <label for="email" class="form-label">Email</label>
+			            <input type="email" class="form-control" id="email" name="email" th:value="${usuario.email}" required>
+			            <div class="invalid-feedback">Por favor ingresa un email válido</div>
+			        </div>
+			        <div class="col-md-6">
+			            <label for="age" class="form-label">Edad</label>
+			            <input type="number" class="form-control" id="age" name="age" th:value="${usuario.age}" min="16" max="120" required>
+			            <div class="invalid-feedback">Edad debe ser entre 16 y 120 años</div>
+			        </div>
+			    </div>
+			
+			    <div class="row g-3 mb-4">
+			        <div class="col-md-6">
+			            <label for="username" class="form-label">Nombre de usuario</label>
+			            <input type="text" class="form-control" id="username" name="username" th:value="${usuario.username}" required>
+			            <div class="invalid-feedback">Por favor ingresa un nombre de usuario</div>
+			        </div>
+			        <div class="col-md-6">
+			            <label for="password" class="form-label">Contraseña</label>
+			            <input type="password" class="form-control" id="password" name="password"
+			                   placeholder="Dejar en blanco para no cambiar">
+			            <small class="text-muted">Mínimo 8 caracteres</small>
+			        </div>
+			    </div>
+			
+			    <div class="d-flex justify-content-end mt-4">
+			        <a th:href="@{/}" class="btn btn-outline-secondary me-3 px-4">
+			            <i class="bi bi-arrow-left me-2"></i>Cancelar
+			        </a>
+			        <button type="submit" class="btn btn-primary px-4">
+			            <i class="bi bi-save me-2"></i>Guardar Cambios
+			        </button>
+			    </div>
+			</form>
+        </div>
+    </div>
+</main>
+
+<footer th:insert="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Validación del formulario
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+        
+        // Validación personalizada del DNI
+        document.getElementById('dni').addEventListener('input', function() {
+            const dniRegex = /^[0-9]{8}[A-Za-z]$/
+            if (this.value && !dniRegex.test(this.value)) {
+                this.setCustomValidity('Formato de DNI inválido')
+            } else {
+                this.setCustomValidity('')
+            }
+        })
+    })()
+</script>
+</body>
+</html>

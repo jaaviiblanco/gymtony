@@ -17,4 +17,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     boolean existsByClaseIdAndClienteUsername(Long claseId, String username);
 
 	List<Reserva> findByCliente(Cliente cliente);
+
+	List<Reserva> findByClienteUsername(String username);
 }

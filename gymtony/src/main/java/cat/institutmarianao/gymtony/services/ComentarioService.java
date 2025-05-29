@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import cat.institutmarianao.gymtony.model.Clase;
 import cat.institutmarianao.gymtony.model.Comentario;
 
 @Service
@@ -28,4 +29,8 @@ public interface ComentarioService {
 	public List<Comentario> findByClienteNameContainingIgnoreCase(String usuario);
 
 	public List<Comentario> buscarPorUsuarioYCalificacion(String usuario, Integer calificacionInt);
+
+	public Clase findClaseById(Long id);
+
+	public Object findComentariosSobreMonitor(Long id);
 }

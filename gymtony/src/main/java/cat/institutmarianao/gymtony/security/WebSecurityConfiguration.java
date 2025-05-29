@@ -45,7 +45,6 @@ public class WebSecurityConfiguration {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                .requestMatchers("/comentarios/nuevo").hasRole("cliente")
                 .requestMatchers("/admin/**", "/clases/*/delete").hasRole("responsable")
                 .requestMatchers("/clases/**").authenticated()
                 .anyRequest().authenticated()

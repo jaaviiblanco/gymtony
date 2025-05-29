@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GymTony</title>
+    <title>Header</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/css/header.css"> <!-- Nuestro CSS personalizado -->
@@ -21,20 +21,18 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" th:href="@{/}"><i class="bi bi-house"></i> Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/clases}"><i class="bi bi-person-arms-up"></i> Clases</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/schedule}"><i class="bi bi-calendar"></i> Horario</a></li>
-                        <li class="nav-item"><a class="nav-link" th:href="@{/comentarios}"><i class="bi bi-envelope"></i> Comentarios</a></li>
-                        
-                        <!-- Botón de Admin (solo visible para administradores) -->
-                        <li class="nav-item" sec:authorize="hasRole('responsable')">
-                            <a class="nav-link admin-link" th:href="@{/admin/dashboard}">
-                                <i class="bi bi-shield-lock"></i> Panel Admin
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item"><a class="nav-link" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Salir</a></li>
-                    </ul>
+					    <li class="nav-item"><a class="nav-link" th:href="@{/}"><i class="bi bi-house"></i> <span th:text="#{navbar.home}">Inicio</span></a></li>
+					    <li class="nav-item"><a class="nav-link" th:href="@{/clases}"><i class="bi bi-person-arms-up"></i> <span th:text="#{navbar.classes}">Clases</span></a></li>
+					    <li class="nav-item"><a class="nav-link" th:href="@{/schedule}"><i class="bi bi-calendar"></i> <span th:text="#{navbar.schedule}">Horario</span></a></li>
+					    <li class="nav-item"><a class="nav-link" th:href="@{/comentarios}"><i class="bi bi-envelope"></i> <span th:text="#{navbar.comments}">Comentarios</span></a></li>
+					
+					    <li class="nav-item" sec:authorize="hasRole('responsable')">
+					        <a class="nav-link admin-link" th:href="@{/admin/dashboard}">
+					            <i class="bi bi-shield-lock"></i> <span th:text="#{navbar.admin}">Panel Admin</span>
+					        </a>
+					    </li>
+					    <li class="nav-item"><a class="nav-link" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> <span th:text="#{navbar.logout}">Salir</span></a></li>
+					</ul>
                 </div>
             </div>
         </nav>

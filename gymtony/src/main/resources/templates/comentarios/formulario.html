@@ -11,83 +11,147 @@
     <link rel="stylesheet" href="/css/formularios.css">
 </head>
 <body>
+    <!-- Header -->
+    <div th:replace="fragments/header :: header"></div>
 
-<!-- Header -->
-<div th:replace="fragments/header :: header"></div>
-
-<main class="container container-main">
-    <div class="form-card">
-        <h1 class="form-title">
-            <i class="bi bi-chat-square-text"></i> Nueva Reseña
-        </h1>        
-        <form th:action="@{/comentarios/new}" th:object="${comentario}" method="post">
-
-            <!-- Selector de clase -->
-            <div class="mb-4">
-                <label for="clase" class="form-label">
-                    <i class="bi bi-easel-fill"></i> Clase
-                </label>
-                <select id="clase" class="form-select" th:field="*{clase.id}" required>
-                    <option value="" disabled selected>Selecciona una clase</option>
-                    <option th:each="clase : ${clases}" 
-                            th:value="${clase.id}" 
-                            th:text="${clase.nombre}">Clase</option>
-                </select>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('clase')}" 
-                     th:errors="*{clase}">Selecciona una clase</div>
+    <main class="container container-main">
+        <div class="form-card">
+            <h1 class="form-title">
+                <i class="bi bi-chat-square-text"></i> Nueva Reseña
+            </h1>
+            <!-- Mostrar mensajes de error -->
+            <div th:if="${param.error}" class="alert alert-danger">
+                <span th:switch="${param.error[0]}">
+                    <span th:case="'SinDestino'">Debes seleccionar una clase o un monitor.</span>
+                    <span th:case="'ClaseNoRealizada'">No puedes comentar una clase que aún no ha ocurrido.</span>
+                    <span th:case="'ClaseNoReservada'">No puedes comentar una clase que no has reservado.</span>
+                    <span th:case="*">Error desconocido.</span>
+                </span>
             </div>
-
-            <!-- Comentario -->
-            <div class="mb-4">
-                <label for="comentario" class="form-label">
-                    <i class="bi bi-chat-left-text"></i> Comentario
-                </label>
-                <textarea id="comentario" class="form-control" 
-                          th:field="*{texto}" rows="5" required
-                          placeholder="Escribe tu experiencia en la clase..."></textarea>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('texto')}" 
-                     th:errors="*{texto}">Error en el comentario</div>
+            <div th:if="${param.comentarioCreado}" class="alert alert-success">
+                Comentario creado exitosamente.
             </div>
-            
-            <!-- Calificación -->
-            <div class="mb-4">
-                <label class="form-label">
-                    <i class="bi bi-star-fill"></i> Calificación
-                </label>
-                <div class="rating-input">
-                    <div class="star-rating">
-                        <input type="radio" id="star5" name="calificacion" value="5" th:checked="*{calificacion == 5}">
-                        <label for="star5" title="Excelente"><i class="bi bi-star-fill"></i></label>
-                        <input type="radio" id="star4" name="calificacion" value="4" th:checked="*{calificacion == 4}">
-                        <label for="star4" title="Muy bueno"><i class="bi bi-star-fill"></i></label>
-                        <input type="radio" id="star3" name="calificacion" value="3" th:checked="*{calificacion == 3}">
-                        <label for="star3" title="Bueno"><i class="bi bi-star-fill"></i></label>
-                        <input type="radio" id="star2" name="calificacion" value="2" th:checked="*{calificacion == 2}">
-                        <label for="star2" title="Regular"><i class="bi bi-star-fill"></i></label>
-                        <input type="radio" id="star1" name="calificacion" value="1" th:checked="*{calificacion == 1}">
-                        <label for="star1" title="Malo"><i class="bi bi-star-fill"></i></label>
-                    </div>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('calificacion')}" 
-                         th:errors="*{calificacion}">Selecciona una calificación</div>
+            <form th:action="@{/comentarios/new}" th:object="${comentario}" method="post" onsubmit="return validarFormulario()">
+                <!-- Selector de tipo de reseña -->
+                <div class="mb-4">
+                    <label class="form-label">
+                        <i class="bi bi-list"></i> ¿Sobre qué quieres dejar tu reseña?
+                    </label>
+                    <select id="tipoResena" class="form-select" onchange="toggleCamposResena()" required>
+                        <option value="" selected disabled>Selecciona una opción</option>
+                        <option value="clase">Clase</option>
+                        <option value="monitor">Monitor</option>
+                    </select>
                 </div>
-            </div>
-            
-            <!-- Botones -->
-            <div class="form-actions">
-                <a th:href="@{/comentarios}" class="btn btn-outline-secondary btn-form">
-                    <i class="bi bi-arrow-left"></i> Cancelar
-                </a>
-                <button type="submit" class="btn btn-primary btn-form">
-                    <i class="bi bi-send-check"></i> Enviar Reseña
-                </button>
-            </div>
-        </form>
-    </div>
-</main>
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
+                <!-- Selector de clase (solo visible si elige 'clase') -->
+                <div class="mb-4" id="campoClase" style="display:none;">
+                    <label for="clase" class="form-label"><i class="bi bi-easel-fill"></i> Clase</label>
+                    <select id="clase" class="form-select" th:field="*{clase.id}" required>
+                        <option value="" selected disabled>Selecciona una clase</option>
+                        <option th:each="clase : ${clases}" th:value="${clase.id}" th:text="${clase.nombre} + ' (' + ${#temporals.format(clase.fechaHora, 'dd/MM/yyyy HH:mm')} + ')'"></option>
+                    </select>
+                </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+                <!-- Selector de monitor (solo visible si elige 'monitor') -->
+                <div class="mb-4" id="campoMonitor" style="display:none;">
+                    <label for="monitor" class="form-label"><i class="bi bi-person-badge"></i> Monitor</label>
+                    <select id="monitor" class="form-select" th:field="*{monitor.id}" required>
+                        <option value="" selected disabled>Selecciona un monitor</option>
+                        <option th:each="monitor : ${monitores}" th:value="${monitor.id}" th:text="${monitor.name}"></option>
+                    </select>
+                </div>
+
+                <!-- Comentario -->
+                <div class="mb-4">
+                    <label for="comentario" class="form-label">
+                        <i class="bi bi-chat-left-text"></i> Comentario
+                    </label>
+                    <textarea id="comentario" class="form-control" th:field="*{texto}" rows="5" required
+                              placeholder="Escribe tu experiencia..."></textarea>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('texto')}" 
+                         th:errors="*{texto}">Error en el comentario</div>
+                </div>
+
+                <!-- Calificación -->
+                <div class="mb-4">
+                    <label class="form-label">
+                        <i class="bi bi-star-fill"></i> Calificación
+                    </label>
+                    <div class="rating-input">
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="calificacion" value="5" th:checked="*{calificacion == 5}">
+                            <label for="star5" title="Excelente"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star4" name="calificacion" value="4" th:checked="*{calificacion == 4}">
+                            <label for="star4" title="Muy bueno"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star3" name="calificacion" value="3" th:checked="*{calificacion == 3}">
+                            <label for="star3" title="Bueno"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star2" name="calificacion" value="2" th:checked="*{calificacion == 2}">
+                            <label for="star2" title="Regular"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star1" name="calificacion" value="1" th:checked="*{calificacion == 1}">
+                            <label for="star1" title="Malo"><i class="bi bi-star-fill"></i></label>
+                        </div>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('calificacion')}" 
+                             th:errors="*{calificacion}">Selecciona una calificación</div>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="form-actions">
+                    <a th:href="@{/comentarios}" class="btn btn-outline-secondary btn-form">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-form">
+                        <i class="bi bi-send-check"></i> Enviar Reseña
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function toggleCamposResena() {
+        const tipo = document.getElementById('tipoResena').value;
+        const campoClase = document.getElementById('campoClase');
+        const campoMonitor = document.getElementById('campoMonitor');
+        const selectClase = document.getElementById('clase');
+        const selectMonitor = document.getElementById('monitor');
+
+        campoClase.style.display = tipo === 'clase' ? 'block' : 'none';
+        campoMonitor.style.display = tipo === 'monitor' ? 'block' : 'none';
+
+        if (tipo === 'clase') {
+            selectClase.required = true;
+            selectMonitor.required = false;
+            selectMonitor.value = '';
+        } else if (tipo === 'monitor') {
+            selectMonitor.required = true;
+            selectClase.required = false;
+            selectClase.value = '';
+        }
+    }
+
+    function validarFormulario() {
+        const tipo = document.getElementById('tipoResena').value;
+        const selectClase = document.getElementById('clase');
+        const selectMonitor = document.getElementById('monitor');
+
+        if (tipo === 'clase' && !selectClase.value) {
+            alert('Por favor selecciona una clase');
+            return false;
+        }
+
+        if (tipo === 'monitor' && !selectMonitor.value) {
+            alert('Por favor selecciona un monitor');
+            return false;
+        }
+
+        return true;
+    }
+    </script>
 </body>
 </html>

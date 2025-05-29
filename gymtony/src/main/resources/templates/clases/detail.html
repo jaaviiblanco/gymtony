@@ -51,28 +51,37 @@
                         <h4>Ubicación</h4>
                         <p th:text="${clase.ubicacion}"></p>
                     </div>
+                    <div class="detail-item">
+                        <h4>Plazas máximas</h4>
+                        <p th:text="${clase.plazasMaximas}"></p>
+                    </div>
                 </div>
             </div>
 
             <div class="action-buttons" sec:authorize="hasRole('cliente')">
-			    <form th:if="${!yaReservada}" th:action="@{/reservas/crear/{claseId}(claseId=${clase.id})}" method="post">
+			    <form th:if="${!yaReservada and clase.fechaHora.isAfter(T(java.time.LocalDateTime).now())}"
+			          th:action="@{/reservas/crear/{claseId}(claseId=${clase.id})}" method="post">
 			        <button type="submit" class="btn btn-success btn-custom">
 			            <i class="bi bi-check-circle"></i> Reservar Clase
 			        </button>
 			    </form>
-			    <form th:if="${yaReservada}" th:action="@{/reservas/cancelar/{claseId}(claseId=${clase.id})}" method="post">
+			    <form th:if="${yaReservada and clase.fechaHora.isAfter(T(java.time.LocalDateTime).now())}"
+			          th:action="@{/reservas/cancelar/{claseId}(claseId=${clase.id})}" method="post">
 			        <button type="submit" class="btn btn-danger btn-custom">
 			            <i class="bi bi-x-circle"></i> Cancelar Reserva
 			        </button>
 			    </form>
 			</div>
 
-            <!-- Solo visible para responsable -->
-            <div class="action-buttons" sec:authorize="hasRole('responsable')">
-                <a th:href="@{'/clases/edit/' + ${clase.id}}" class="btn btn-primary btn-custom">
-                    <i class="bi bi-pencil"></i> Editar Clase
-                </a>
-            </div>
+
+            <!-- Botón de editar para responsables o el monitor asignado -->
+			<div class="action-buttons" 
+			     sec:authorize="hasAnyRole('responsable','monitor')"
+			     th:if="${#authentication.name == clase.monitor.username or #authorization.expression('hasRole(''responsable'')')}">
+			    <a th:href="@{'/clases/edit/' + ${clase.id}}" class="btn btn-primary btn-custom">
+			        <i class="bi bi-pencil"></i> Editar Clase
+			    </a>
+			</div>
         </div>
     </div>
 </div>

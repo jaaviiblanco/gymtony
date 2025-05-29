@@ -69,6 +69,14 @@
                         <div class="class-meta">
                             <span th:text="${#temporals.format(comentario.fechaComentario, 'dd/MM/yyyy HH:mm')}"></span>
                         </div>
+                        <p class="mt-2 mb-2">
+						    <span th:if="${comentario.tipo.name() == 'clase'}">
+						        Clase: <b th:text="${comentario.clase.nombre}"></b>
+						    </span>
+						    <span th:if="${comentario.tipo.name() == 'monitor'}">
+						        Monitor: <b th:text="${comentario.monitor.name}"></b>
+						    </span>
+						</p>
                         <p class="mt-2 mb-2" th:text="${comentario.texto}"></p>
                         <div class="rating">
                             <span th:each="i : ${#numbers.sequence(1, 5)}">

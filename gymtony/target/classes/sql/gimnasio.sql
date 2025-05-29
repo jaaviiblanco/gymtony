@@ -9,7 +9,7 @@ CREATE TABLE planes_gimnasio (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     descripcion VARCHAR(255) NOT NULL,
-    precioMensual DOUBLE NOT NULL,
+    precio_mensual DOUBLE NOT NULL,
     activo BOOLEAN NOT NULL DEFAULT TRUE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -36,11 +36,11 @@ CREATE TABLE clases (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT NOT NULL,
-    fechaHora DATETIME NOT NULL,
+    fecha_hora DATETIME NOT NULL,
     monitor_id BIGINT NOT NULL,
     duracion INT NOT NULL CHECK (duracion >= 1), -- Duración mínima de 1 minuto
     ubicacion VARCHAR(100) NOT NULL,
-    plazasMaximas INT NOT NULL CHECK (plazasMaximas >= 1), -- Añadido campo para plazas
+    plazas_maximas INT NOT NULL CHECK (plazas_maximas >= 1), -- Añadido campo para plazas
     FOREIGN KEY (monitor_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -49,36 +49,28 @@ CREATE TABLE reservas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     usuario_id BIGINT NOT NULL,
     clase_id BIGINT NOT NULL,
-    fechaReserva DATETIME NOT NULL,
+    fecha_reserva DATETIME NOT NULL,
     confirmada BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (clase_id) REFERENCES clases(id) ON DELETE CASCADE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Tabla de comentarios
+-- Tabla de comentarios (mejorada)
 CREATE TABLE comentarios (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     cliente_id BIGINT NOT NULL,
-    clase_id BIGINT NOT NULL,
-    comentario TEXT NOT NULL,
-    fechaComentario DATETIME NOT NULL,
-    FOREIGN KEY (cliente_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-    FOREIGN KEY (clase_id) REFERENCES clases(id) ON DELETE CASCADE
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- Tabla de reseñas (Comentarios sobre clases y monitores)
-CREATE TABLE reseñas (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id BIGINT NOT NULL,
-    clase_id BIGINT NOT NULL,
-    monitor_id BIGINT NOT NULL,
-    puntuacion INT NOT NULL CHECK (puntuacion >= 1 AND puntuacion <= 5), -- Rango de puntuación entre 1 y 5
-    comentario TEXT,
-    fechaComentario DATETIME NOT NULL,
+    clase_id BIGINT NULL,
+    monitor_id BIGINT NULL,
+    tipo ENUM('clase', 'monitor') NOT NULL DEFAULT 'clase',
+    texto TEXT NOT NULL,
+    calificacion INT NOT NULL CHECK (calificacion BETWEEN 1 AND 5),
+    fecha_comentario DATETIME NOT NULL,
     FOREIGN KEY (cliente_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (clase_id) REFERENCES clases(id) ON DELETE CASCADE,
-    FOREIGN KEY (monitor_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    FOREIGN KEY (monitor_id) REFERENCES usuarios(id) ON DELETE SET NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
 
 -- Índices para optimizar las búsquedas en algunas columnas
 CREATE INDEX idx_usuario_username ON usuarios(username);
@@ -88,6 +80,3 @@ CREATE INDEX idx_reserva_usuario_id ON reservas(usuario_id);
 CREATE INDEX idx_reserva_clase_id ON reservas(clase_id);
 CREATE INDEX idx_comentarios_cliente_id ON comentarios(cliente_id);
 CREATE INDEX idx_comentarios_clase_id ON comentarios(clase_id);
-CREATE INDEX idx_reseñas_cliente_id ON reseñas(cliente_id);
-CREATE INDEX idx_reseñas_clase_id ON reseñas(clase_id);
-CREATE INDEX idx_reseñas_monitor_id ON reseñas(monitor_id);

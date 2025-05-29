@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import cat.institutmarianao.gymtony.exception.NotFoundException;
+import cat.institutmarianao.gymtony.model.Clase;
 import cat.institutmarianao.gymtony.model.Cliente;
 import cat.institutmarianao.gymtony.model.Reserva;
 import cat.institutmarianao.gymtony.repositories.ClaseRepository;
@@ -83,6 +84,13 @@ public class ReservaServiceImpl implements ReservaService {
     
     public List<Reserva> findByCliente(Cliente cliente) {
     	return reservaRepository.findByCliente(cliente);
+    }
+    
+    public List<Clase> findClasesReservadasByUsuario(String username) {
+        return reservaRepository.findByClienteUsername(username)
+                .stream()
+                .map(Reserva::getClase)
+                .toList();
     }
 }
 

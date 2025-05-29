@@ -48,7 +48,7 @@ public class HomeController {
                 } else if (usuario instanceof Monitor monitor) {
                     model.addAttribute("tipoUsuario", "monitor");
                     
-                    model.addAttribute("comentariosMonitor", comentarioService.findByMonitorId(monitor.getId()));
+                    model.addAttribute("comentariosMonitor", comentarioService.findComentariosSobreMonitor(monitor.getId()));
                     model.addAttribute("clasesMonitor", claseService.findByMonitorId(monitor.getId()));
                     
                 } else if (usuario instanceof Cliente) {
@@ -65,6 +65,5 @@ public class HomeController {
 
         return "home";
     }
-
 
 }

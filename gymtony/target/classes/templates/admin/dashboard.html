@@ -12,38 +12,46 @@
 </head>
 <body>
 
-<!-- Header -->
-<header th:insert="~{fragments/header :: header}"></header>
+    <!-- Header global -->
+    <header th:insert="~{fragments/header :: header}"></header>
 
-<main class="container container-main">
-    <h1 class="page-title">
-        <i class="bi bi-speedometer2"></i> Panel de Administración
-    </h1>
-    <div class="quick-actions mb-5">
-        <div class="actions-grid">
-            <a th:href="@{/admin/users/new}" class="action-card">
-                <i class="bi bi-person-plus"></i>
-                <span>Crear Nuevo Usuario</span>
-            </a>
-            <a th:href="@{/admin/users}" class="action-card">
-                <i class="bi bi-people"></i>
-                <span>Gestionar Usuarios</span>
-            </a>
-            <a th:href="@{/clases/new}" class="action-card">
-                <i class="bi bi-calendar-plus"></i>
-                <span>Crear Nueva Clase</span>
-            </a>
-            <a th:href="@{/clases}" class="action-card">
-                <i class="bi bi-list-task"></i>
-                <span>Ver Todas las Clases</span>
-            </a>
-        </div>
-    </div>
-</main>
+    <main class="container-xl py-5 container-main">
+        <!-- Título principal -->
+        <section class="mb-5">
+            <h1 class="page-title d-flex align-items-center gap-2">
+                <i class="bi bi-speedometer2"></i> Panel de Administración
+            </h1>
+            <p class="text-muted">Desde aquí puedes gestionar usuarios, clases y configuraciones generales del sistema.</p>
+        </section>
 
-<!-- Footer -->
-<div th:replace="fragments/footer :: footer"></div>
+        <!-- Acciones rápidas -->
+        <section aria-label="Acciones rápidas de administración">
+            <h2 class="section-title"><i class="bi bi-lightning-charge-fill"></i> Acciones Rápidas</h2>
+            <div class="actions-grid">
+                <a th:href="@{/admin/users/new}" class="action-card">
+                    <i class="bi bi-person-plus"></i>
+                    <span>Crear Usuario</span>
+                </a>
+                <a th:href="@{/admin/users}" class="action-card">
+                    <i class="bi bi-people"></i>
+                    <span>Gestionar Usuarios</span>
+                </a>
+                <a th:href="@{/clases/new}" class="action-card">
+                    <i class="bi bi-calendar-plus"></i>
+                    <span>Crear Clase</span>
+                </a>
+                <a th:href="@{/clases}" class="action-card">
+                    <i class="bi bi-list-task"></i>
+                    <span>Ver Clases</span>
+                </a>
+            </div>
+        </section>
+    </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer global -->
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+    <!-- Bootstrap bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -96,3 +96,13 @@ strong {
         margin-bottom: 1rem;
     }
 }
+
+.hover-opacity-100:hover {
+    opacity: 1 !important;
+    color: #0d6efd !important; /* Color primary de Bootstrap */
+}
+
+.card-body.scrollable {
+    max-height: 300px;
+    overflow-y: auto;
+}

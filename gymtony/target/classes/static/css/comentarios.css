@@ -7,14 +7,12 @@
     --danger: #dc3545;
 }
 
-/* Estructura común */
 .container-main {
     padding-top: 80px;
     padding-bottom: 40px;
     min-height: calc(100vh - 120px);
 }
 
-/* Títulos */
 .page-title {
     color: var(--dark);
     font-weight: 700;
@@ -23,7 +21,6 @@
     border-bottom: 2px solid var(--primary);
 }
 
-/* Cards y listados */
 .class-card {
     border: none;
     border-radius: 10px;
@@ -53,13 +50,11 @@
     color: var(--secondary);
 }
 
-/* Estrellas de valoración */
 .rating {
     margin: 0.5rem 0;
     font-size: 1.2rem;
 }
 
-/* Botones */
 .btn-action {
     border-radius: 8px;
     padding: 0.75rem 1.5rem;
@@ -71,7 +66,6 @@
     margin-right: 8px;
 }
 
-/* Transiciones para mensajes */
 .fade-out {
     opacity: 0;
     transition: opacity 1s ease-in-out;

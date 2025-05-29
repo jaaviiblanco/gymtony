@@ -24,7 +24,7 @@ public class DataLoader implements CommandLineRunner {
         if (usuarioRepository.findByUsername("admin").isEmpty()) {
             Usuario admin = new Responsable(
                 "admin",
-                passwordEncoder.encode("admin12345"), // La contraseña se guarda encriptada
+                passwordEncoder.encode("marianao"),
                 "Admin",
                 "12345678A",
                 "admin@gymtony.com",

@@ -49,10 +49,10 @@ public class ComentarioServiceImplTest {
         cliente.setUsername("cliente1");
         cliente.setEmail("cliente@test.com");
 
-        comentario1 = new Comentario(cliente, "Buen gimnasio", 5);
+        comentario1 = new Comentario(cliente, "Buen gimnasio", 5, null);
         comentario1.setId(1L);
 
-        comentario2 = new Comentario(cliente, "Mal servicio", 2);
+        comentario2 = new Comentario(cliente, "Mal servicio", 2, null);
         comentario2.setId(2L);
     }
 

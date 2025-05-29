@@ -26,17 +26,24 @@ public class RegisterController {
     public String registerUser(@Valid @ModelAttribute("usuario") Cliente usuario,
                                BindingResult bindingResult, Model model) {
 
-        // DNI ya existe
         if (usuarioService.findByDni(usuario.getDni()).isPresent()) {
             bindingResult.rejectValue("dni", "error.dni", "Este DNI ya está registrado");
         }
 
-        // Contraseñas no coinciden
+        if (usuarioService.findByUsername(usuario.getUsername()).isPresent()) {
+            bindingResult.rejectValue("username", "error.username", "Este nombre de usuario ya está registrado");
+        }
+
+        if (usuarioService.findByEmail(usuario.getEmail()).isPresent()) {
+            bindingResult.rejectValue("email", "error.email", "Este correo electrónico ya está registrado");
+        }
+
         if (!usuario.getPassword().equals(usuario.getConfirmPassword())) {
             bindingResult.rejectValue("confirmPassword", "error.confirmPassword", "Las contraseñas no coinciden");
         }
 
         if (bindingResult.hasErrors()) {
+            System.out.println("Errores de validación: " + bindingResult.getAllErrors());
             return "register";
         }
 

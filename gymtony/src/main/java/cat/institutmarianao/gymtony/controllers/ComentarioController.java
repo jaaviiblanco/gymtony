@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import cat.institutmarianao.gymtony.model.Clase;
 import cat.institutmarianao.gymtony.model.Cliente;
 import cat.institutmarianao.gymtony.model.Comentario;
+import cat.institutmarianao.gymtony.model.Comentario.TipoComentario;
 import cat.institutmarianao.gymtony.model.Usuario;
-import cat.institutmarianao.gymtony.services.ClaseService;
 import cat.institutmarianao.gymtony.services.ComentarioService;
+import cat.institutmarianao.gymtony.services.ReservaService;
+import cat.institutmarianao.gymtony.services.UsuarioService;
 
 @Controller
 @RequestMapping("/comentarios")
@@ -26,24 +28,54 @@ public class ComentarioController {
     private ComentarioService comentarioService;
     
     @Autowired
-    private ClaseService claseService;
+    private UsuarioService usuarioService;
+    
+    @Autowired
+    private ReservaService reservaService;
 
     @GetMapping("/new")
-    public String mostrarFormularioComentario(Model model) {
-        List<Clase> clases = claseService.findAll();
-        model.addAttribute("clases", clases); 
+    public String mostrarFormularioComentario(Model model, @AuthenticationPrincipal Cliente clienteAutenticado) {
+        List<Clase> clasesReservadas = reservaService.findClasesReservadasByUsuario(clienteAutenticado.getUsername())
+                .stream()
+                .filter(clase -> clase.getFechaHora().isBefore(LocalDateTime.now()))
+                .toList();
+
+        model.addAttribute("clases", clasesReservadas);
+        model.addAttribute("monitores", usuarioService.getAllMonitores());
         model.addAttribute("comentario", new Comentario());
         return "comentarios/formulario";
     }
 
-
-    // Guardar comentario
     @PostMapping("/new")
-    public String guardarComentario(@ModelAttribute Comentario comentario, @AuthenticationPrincipal Cliente clienteAutenticado) {
-        comentario.setCliente(clienteAutenticado); 
+    public String guardarComentario(@ModelAttribute Comentario comentario,
+                                    @AuthenticationPrincipal Cliente clienteAutenticado) {
+        comentario.setCliente(clienteAutenticado);
         comentario.setFechaComentario(LocalDateTime.now());
+
+        if (comentario.getMonitor() != null) {
+            comentario.setTipo(TipoComentario.monitor);
+        } else if (comentario.getClase() != null) {
+            comentario.setTipo(TipoComentario.clase);
+        } else {
+            return "redirect:/comentarios/new?error=SinDestino";
+        }
+
+        if (comentario.getClase() != null) {
+            // Recupera la clase desde la base de datos
+            Clase clase = comentarioService.findClaseById(comentario.getClase().getId());
+            if (clase.getFechaHora().isAfter(LocalDateTime.now())) {
+                return "redirect:/comentarios/new?error=ClaseNoRealizada";
+            }
+            if (!reservaService.estaReservadaPorUsuario(clase.getId(), clienteAutenticado.getUsername())) {
+                return "redirect:/comentarios/new?error=ClaseNoReservada";
+            }
+            comentario.setClase(clase); // asegúrate de guardar la clase completa
+        }
+
+
+
         comentarioService.save(comentario);
-        return "redirect:/comentarios";
+        return "redirect:/comentarios?comentarioCreado";
     }
 
     @GetMapping
@@ -53,7 +85,6 @@ public class ComentarioController {
 
         Integer calificacionInt = null;
 
-        // Validar y convertir la calificación si no es el valor especial "_"
         if (calificacion != null && !calificacion.equals("_") && !calificacion.isBlank()) {
             try {
                 calificacionInt = Integer.parseInt(calificacion);
@@ -62,7 +93,6 @@ public class ComentarioController {
             }
         }
 
-        // Obtener los comentarios filtrados
         List<Comentario> comentariosFiltrados = comentarioService.buscarPorUsuarioYCalificacion(usuario, calificacionInt);
 
         model.addAttribute("comentarios", comentariosFiltrados);
@@ -93,7 +123,5 @@ public class ComentarioController {
 
         return ResponseEntity.status(403).build();
     }
-
-
 
 }

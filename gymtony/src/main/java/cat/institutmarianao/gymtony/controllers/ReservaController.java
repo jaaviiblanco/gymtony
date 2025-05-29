@@ -43,8 +43,6 @@ public class ReservaController {
         return "redirect:/clases?reservaExitosa=true";
     }
 
-
-
     @PostMapping("/cancelar/{claseId}")
     public String cancelarReserva(@PathVariable @NotNull @Positive Long claseId, Principal principal) {
         String username = principal.getName();

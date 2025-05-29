@@ -1,11 +1,14 @@
 package cat.institutmarianao.gymtony.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cat.institutmarianao.gymtony.model.Clase;
 import cat.institutmarianao.gymtony.model.Comentario;
+import cat.institutmarianao.gymtony.repositories.ClaseRepository;
 import cat.institutmarianao.gymtony.repositories.ComentarioRepository;
 import cat.institutmarianao.gymtony.services.ComentarioService;
 
@@ -14,6 +17,9 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     @Autowired
     private ComentarioRepository comentarioRepository;
+    
+    @Autowired
+    private ClaseRepository claseRepository;
 
     @Override
     public List<Comentario> findAll() {
@@ -61,4 +67,20 @@ public class ComentarioServiceImpl implements ComentarioService {
 	public List<Comentario> buscarPorUsuarioYCalificacion(String usuario, Integer calificacionInt) {
 		return comentarioRepository.buscarPorUsuarioYCalificacion(usuario, calificacionInt);
 	}
+	
+	public Clase findClaseById(Long id) {
+	    return claseRepository.findById(id).orElse(null);
+	}
+	
+	public List<Comentario> findComentariosSobreMonitor(Long monitorId) {
+	    List<Comentario> comentariosClase = comentarioRepository.findByMonitorId(monitorId);
+	    List<Comentario> comentariosDirectos = comentarioRepository.findByMonitor_IdAndClaseIsNull(monitorId);
+
+	    List<Comentario> todos = new ArrayList<>();
+	    todos.addAll(comentariosClase);
+	    todos.addAll(comentariosDirectos);
+	    return todos;
+	}
+
+
 }

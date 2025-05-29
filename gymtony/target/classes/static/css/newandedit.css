@@ -9,7 +9,6 @@
     --border-radius: 12px;
 }
 
-/* Estructura común */
 .class-form-container {
     padding: 80px 20px 60px;
     max-width: 800px;
@@ -47,7 +46,6 @@
     margin-bottom: 2rem;
 }
 
-/* Elementos del formulario */
 .form-label {
     font-weight: 600;
     color: var(--dark);
@@ -75,7 +73,6 @@
     box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.15);
 }
 
-/* Botones y acciones */
 .class-form-actions {
     display: flex;
     justify-content: space-between;
@@ -118,7 +115,6 @@
     transform: translateY(-2px);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .class-form-container {
         padding: 60px 15px 40px;

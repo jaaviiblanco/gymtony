@@ -49,21 +49,21 @@
 
 .week-container {
     display: flex;
-    gap: 0.5rem; /* Reducido para ajustar más columnas */
-    overflow-x: hidden; /* Evitar scroll horizontal */
+    gap: 0.5rem; 
+    overflow-x: hidden; 
     padding: 1rem 0;
-    justify-content: space-between; /* Distribuir columnas */
+    justify-content: space-between; 
 }
 
 .day-column {
-    min-width: 13%;  /* Aproximadamente 1/7 del ancho total */
+    min-width: 13%; 
     max-width: 13%;
     background: white;
     border-radius: var(--border-radius);
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     overflow: hidden;
     transition: all 0.3s ease;
-    flex-shrink: 0;  /* No permitir que se reduzca más */
+    flex-shrink: 0;  
 }
 
 .day-column.today {
@@ -74,7 +74,7 @@
 .day-header {
     background-color: var(--primary);
     color: white;
-    padding: 0.5rem 0.75rem; /* Reducido para compactar */
+    padding: 0.5rem 0.75rem; 
     text-align: center;
     font-size: 1rem;
 }
@@ -91,21 +91,21 @@
 }
 
 .classes-list {
-    padding: 0.5rem; /* Reducido */
+    padding: 0.5rem; 
     display: flex;
     flex-direction: column;
-    gap: 0.5rem; /* Menos espacio entre clases */
-    min-height: 150px; /* Más compacto */
+    gap: 0.5rem;
+    min-height: 150px; 
 }
 
 .class-card {
     background: var(--light);
     border-radius: var(--border-radius);
-    padding: 0.6rem 0.8rem; /* Padding reducido */
+    padding: 0.6rem 0.8rem; 
     cursor: pointer;
     transition: all 0.2s ease;
     border-left: 3px solid var(--primary);
-    font-size: 0.85rem; /* Texto un poco más pequeño */
+    font-size: 0.85rem; 
 }
 
 .class-card:hover {
@@ -165,7 +165,6 @@
     margin-bottom: 0.5rem;
 }
 
-/* Vista móvil */
 .mobile-day-view {
     display: none;
     margin-top: 2rem;
@@ -261,7 +260,6 @@
     color: var(--primary);
 }
 
-/* Responsive */
 @media (max-width: 992px) {
     .week-container {
         gap: 0.75rem;
@@ -301,3 +299,10 @@
         font-size: 1.5rem;
     }
 }
+
+.classes-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+

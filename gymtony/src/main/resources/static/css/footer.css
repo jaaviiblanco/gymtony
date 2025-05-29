@@ -4,7 +4,6 @@
     --light: #f8f9fa;
 }
 
-/* Solución definitiva para una sola línea */
 .footer.mt-auto {
     border-top: 2px solid var(--primary) !important;
     border-bottom: none !important;
@@ -15,7 +14,6 @@
     box-shadow: 0 -3px 6px rgba(0, 123, 255, 0.15);
 }
 
-/* Resto de estilos... */
 .footer h6 {
     color: #212529;
     font-size: 1rem;

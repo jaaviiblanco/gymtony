@@ -10,42 +10,48 @@
 </head>
 <body>
 
-<footer th:fragment="footer" class="footer mt-auto py-3">
+<footer th:fragment="footer" class="footer mt-auto py-4 bg-white text-dark">
     <div class="container">
         <div class="row text-center text-md-start">
             <div class="col-md-4 mb-3">
-                <h6>Enlaces</h6>
+                <h5 class="text-uppercase">GymTony</h5>
+                <p>Tu gimnasio de confianza en Sant Boi de Llobregat. Clases personalizadas, monitores profesionales y un ambiente motivador.</p>
+                <img src="/images/logo.jpg" alt="Logo GymTony" class="img-fluid" style="max-width: 100px;">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <h6 class="text-uppercase">Navegación</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Contacto</a></li>
+                    <li><a th:href="@{/}"><i class="bi bi-house me-1"></i> Inicio</a></li>
+                    <li><a th:href="@{/clases}"><i class="bi bi-person-arms-up me-1"></i> Clases</a></li>
+                    <li><a th:href="@{/schedule}"><i class="bi bi-calendar me-1"></i> Horario</a></li>
+                    <li><a th:href="@{/comentarios}"><i class="bi bi-envelope me-1"></i> Comentarios</a></li>
                 </ul>
             </div>
+
             <div class="col-md-4 mb-3">
-                <h6>Servicios</h6>
+                <h6 class="text-uppercase">Contacto</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#">Entrenamiento</a></li>
-                    <li><a href="#">Clases</a></li>
+                    <li><i class="bi bi-geo-alt-fill me-1"></i> Sant Boi de Llobregat</li>
+                    <li><i class="bi bi-telephone-fill me-1"></i> 936 407 858</li>
+                    <li><i class="bi bi-envelope-fill me-1"></i> info@gymtony.com</li>
                 </ul>
-            </div>
-            <div class="col-md-4 mb-3">
-                <h6>Contacto</h6>
-                <ul class="list-unstyled">
-                    <li><i class="bi bi-geo-alt"></i> Sant Boi de Llobregat</li>
-                    <li><i class="bi bi-telephone"></i> 936407858</li>
-                </ul>
+                <div class="social-icons mt-2">
+                    <a href="#" class="text-white me-2"><i class="bi bi-whatsapp"></i></a>
+                    <a href="#" class="text-white me-2"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white me-2"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-twitter-x"></i></a>
+                </div>
             </div>
         </div>
 
-        <div class="text-center pt-2">
-            <div class="social-icons">
-                <a href="#"><i class="bi bi-whatsapp"></i></a>
-                <a href="#"><i class="bi bi-facebook"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-twitter-x"></i></a>
-            </div>
+        <hr class="bg-light">
+        <div class="text-center small">
+            &copy; 2025 GymTony. Todos los derechos reservados.
         </div>
     </div>
 </footer>
+
 
 </body>
 </html>

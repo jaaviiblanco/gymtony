@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,19 +76,29 @@
 			    <input type="number" class="form-control" id="plazasMaximas" name="plazasMaximas"
 			           th:field="*{plazasMaximas}" min="1" required>
 			</div>
-			            
 
             <div class="mb-4">
-                <label class="form-label">
-                    <i class="bi bi-person-badge"></i> Monitor
-                </label>
-                <select th:field="*{monitor.id}" class="form-select" required>
-                    <option value="" disabled selected>Selecciona un monitor</option>
-                    <option th:each="monitor : ${monitores}"
-                            th:value="${monitor.id}"
-                            th:text="${monitor.name}"></option>
-                </select>
-            </div>
+		    <label class="form-label">
+		        <i class="bi bi-person-badge"></i> Monitor
+		    </label>
+		
+		    <!-- Si es responsable, mostrar desplegable -->
+		    <div th:if="${esResponsable}">
+		        <select th:field="*{monitor.id}" class="form-select" required>
+		            <option value="" disabled selected>Selecciona un monitor</option>
+		            <option th:each="monitor : ${monitores}"
+		                    th:value="${monitor.id}"
+		                    th:text="${monitor.name}"></option>
+		        </select>
+		    </div>
+		
+		    <!-- Si es monitor, mostrar nombre en campo de solo lectura -->
+		    <div th:if="${!esResponsable}">
+		        <input type="text" class="form-control" th:value="${clase.monitor.name}" readonly>
+		        <input type="hidden" th:field="*{monitor.id}" />
+		    </div>
+		</div>
+
 
             <div class="class-form-actions">
                 <div class="class-form-buttons">

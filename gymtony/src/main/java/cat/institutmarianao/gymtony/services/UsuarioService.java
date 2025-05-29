@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import cat.institutmarianao.gymtony.model.Cliente;
+import cat.institutmarianao.gymtony.model.Comentario;
 import cat.institutmarianao.gymtony.model.Monitor;
 import cat.institutmarianao.gymtony.model.Responsable;
 import cat.institutmarianao.gymtony.model.Usuario;
@@ -29,4 +30,10 @@ public interface UsuarioService extends UserDetailsService {
     
     public List<Usuario> filterUsers(String role, String search);
 	void deleteById(Long id);
+	boolean existsByUsername(String username);
+	boolean existsByEmail(String email);
+	boolean existsByDni(String dni);
+	void saveWithRoleChange(Usuario usuarioExistente, Usuario usuarioActualizado);
+	
+	
 }

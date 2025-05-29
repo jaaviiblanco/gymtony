@@ -65,7 +65,7 @@ public abstract class Usuario implements UserDetails, Serializable {
 
     @JsonInclude(Include.NON_NULL)
     @Column(nullable = false)
-    @Size(min = 10, message = "La contraseña debe tener al menos 10 caracteres")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
     private String password;
 
     @Column(nullable = false)

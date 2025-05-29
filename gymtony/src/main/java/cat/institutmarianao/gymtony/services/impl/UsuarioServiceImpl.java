@@ -133,4 +133,23 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void deleteById(Long id) {
         usuarioRepository.deleteById(id);
     }
+    
+    public boolean existsByUsername(String username) {
+        return usuarioRepository.findByUsername(username).isPresent();
+    }
+
+    public boolean existsByEmail(String email) {
+        return usuarioRepository.findByEmail(email).isPresent();
+    }
+
+    public boolean existsByDni(String dni) {
+        return usuarioRepository.findByDni(dni).isPresent();
+    }
+    
+    public void saveWithRoleChange(Usuario usuarioExistente, Usuario usuarioActualizado) {
+        if (!usuarioExistente.getClass().equals(usuarioActualizado.getClass())) {
+            usuarioRepository.deleteById(usuarioExistente.getId());
+        }
+        usuarioRepository.save(usuarioActualizado);
+    }
 }

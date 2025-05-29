@@ -7,14 +7,12 @@
     --danger: #dc3545;
 }
 
-/* Estructura común */
 .container-main {
     padding-top: 80px;
     padding-bottom: 40px;
     min-height: calc(100vh - 120px);
 }
 
-/* Títulos */
 .page-title {
     color: var(--dark);
     font-weight: 700;
@@ -23,7 +21,6 @@
     border-bottom: 2px solid var(--primary);
 }
 
-/* Cards y listados */
 .class-card {
     border: none;
     border-radius: 10px;
@@ -68,7 +65,6 @@
     color: var(--secondary);
 }
 
-/* Formularios */
 .class-form {
     max-width: 700px;
     margin: 0 auto;

@@ -71,18 +71,25 @@
                     <input type="password" id="password" class="form-control" th:field="*{password}"
                            placeholder="Introduce una contraseña" th:if="${usuario.id == null}" required />
                     <input type="password" id="password" class="form-control" th:field="*{password}"
-                           placeholder="Deja en blanco para mantener la contraseña" th:if="${usuario.id != null}" />
+                           placeholder="Deja en blanco para mantener la contraseña" th:if="${usuario.id != null}" />            
                 </div>
             </div>
 
             <div class="row mb-4">
-                <div class="col-md-6">
-                    <label for="role" class="form-label">Rol</label>
-                    <select id="role" class="form-select" th:field="*{role}" required>
-                        <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
-                    </select>
-                </div>
-            </div>
+			    <div class="col-md-6">
+			        <label for="role" class="form-label">Rol</label>
+			        <select id="role" class="form-select" th:field="*{role}" required>
+			            <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+			        </select>
+			    </div>
+			
+			    <div class="col-md-6" th:if="${usuario.id == null}">
+			        <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+			        <input type="password" id="confirmPassword" name="confirmPassword"
+			               class="form-control" placeholder="Repite la contraseña" required>
+			    </div>
+			</div>
+
 
             <div class="form-actions">
                 <a th:href="@{/admin/users}" class="btn btn-outline-secondary btn-form">

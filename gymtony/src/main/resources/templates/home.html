@@ -25,24 +25,49 @@
     <div class="row g-4">
 
         <!-- Perfil -->
-        <div class="col-lg-4 col-md-6">
-            <div class="card">
-                <div class="card-header">Tu Perfil</div>
-                <div class="card-body">
-                    <p><strong>Usuario:</strong> <span th:text="${usuario.username}">usuario</span></p>
-                    <p><strong>Email:</strong> <span th:text="${usuario.email}">email@example.com</span></p>
-                    <p><strong>Rol:</strong> <span th:text="${usuario.role}">Rol</span></p>
-                    <p><strong>Edad:</strong> <span th:text="${usuario.age}">25</span></p>
-                    <p><strong>DNI:</strong> <span th:text="${usuario.dni}">12345678A</span></p>
-                </div>
-            </div>
-        </div>
+		<div class="col-lg-4 col-md-6">
+		    <div class="card h-100">
+		        <div class="card-header d-flex justify-content-between align-items-center position-relative">
+		            <span>Tu Perfil</span>
+		            <a th:href="@{/profile/edit}" class="btn btn-icon" title="Editar perfil">
+		                <i class="bi bi-pencil-square"></i>
+		            </a>
+		        </div>
+		        <div class="card-body">
+		            <div class="d-flex align-items-center mb-3">
+		                <div class="flex-grow-1">
+		                    <h5 class="mb-1" th:text="${usuario.name}">Nombre Usuario</h5>
+		                    <p class="text-muted mb-0" th:text="${usuario.role}">Rol</p>
+		                </div>
+		            </div>
+		            
+		            <div class="profile-details">
+		                <div class="detail-item">
+		                    <i class="bi bi-person-badge me-2"></i>
+		                    <span th:text="${usuario.dni}">DNI</span>
+		                </div>
+		                <div class="detail-item">
+		                    <i class="bi bi-envelope me-2"></i>
+		                    <span th:text="${usuario.email}">Email</span>
+		                </div>
+		                <div class="detail-item">
+		                    <i class="bi bi-person me-2"></i>
+		                    <span th:text="${usuario.username}">Username</span>
+		                </div>
+		                <div class="detail-item">
+		                    <i class="bi bi-calendar3 me-2"></i>
+		                    <span th:text="${usuario.age} + ' años'">Edad</span>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
 
         <!-- Tus Clases (solo para clientes) -->
         <div class="col-lg-4 col-md-6" sec:authorize="hasRole('cliente')">
             <div class="card">
                 <div class="card-header">Tus Clases</div>
-                <div class="card-body p-0">
+                <div class="card-body p-0 scrollable">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item" th:each="reserva : ${reservasConfirmadas}">
                             <h6 class="mb-1" th:text="${reserva.clase.nombre}">Clase</h6>
@@ -69,10 +94,18 @@
         <div class="col-lg-4 col-md-12" sec:authorize="hasRole('cliente')">
             <div class="card">
                 <div class="card-header">Tus Comentarios</div>
-                <div class="card-body p-0">
+                <div class="card-body p-0 scrollable">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item notification" th:each="comentario : ${comentariosRecientes}">
                             <strong th:text="${comentario.cliente.name}">Nombre</strong>
+                            <p class="mt-2 mb-2">
+							    <span th:if="${comentario.tipo.name() == 'clase'}">
+							        Clase: <b th:text="${comentario.clase.nombre}"></b>
+							    </span>
+							    <span th:if="${comentario.tipo.name() == 'monitor'}">
+							        Monitor: <b th:text="${comentario.monitor.name}"></b>
+							    </span>
+							</p>
                             <p class="mb-2" th:text="${comentario.texto}">Comentario</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="rating">
@@ -92,7 +125,7 @@
 		<div class="col-lg-4 col-md-6" sec:authorize="hasRole('monitor')">
 		    <div class="card">
 		        <div class="card-header">Tus Clases</div>
-		        <div class="card-body p-0">
+		        <div class="card-body p-0 scrollable">
 		            <ul class="list-group list-group-flush">
 		                <li class="list-group-item" th:each="clase : ${clasesMonitor}">
 		                    <h6 class="mb-1" th:text="${clase.nombre}">Clase</h6>
@@ -118,12 +151,20 @@
 
         <!-- Comentarios sobre tus clases (solo para monitores) -->
         <div class="col-lg-4 col-md-12" sec:authorize="hasRole('monitor')">
-            <div class="card text-bg-light">
-                <div class="card-header">Comentarios sobre tus clases</div>
-                <div class="card-body p-0">
+            <div class="card">
+                <div class="card-header">Comentarios</div>
+                <div class="card-body p-0 scrollable">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item notification" th:each="comentario : ${comentariosMonitor}">
                             <strong th:text="${comentario.cliente.name}">Nombre</strong>
+                            <p class="mt-2 mb-2">
+							    <span th:if="${comentario.tipo.name() == 'clase'}">
+							        Clase: <b th:text="${comentario.clase.nombre}"></b>
+							    </span>
+							    <span th:if="${comentario.tipo.name() == 'monitor'}">
+							        Monitor: <b th:text="${comentario.monitor.name}"></b>
+							    </span>
+							</p>
                             <p class="mb-2" th:text="${comentario.texto}">Comentario</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="rating">
@@ -152,12 +193,20 @@
 
         <!-- Todas las Reseñas (solo para responsables) -->
         <div class="col-lg-4 col-md-6" sec:authorize="hasRole('responsable')">
-            <div class="card text-bg-light">
+            <div class="card">
                 <div class="card-header">Comentarios Recientes</div>
-                <div class="card-body p-0">
+                <div class="card-body p-0 scrollable">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item notification" th:each="comentario : ${comentariosRecientesAdmin}">
                             <strong th:text="${comentario.cliente.name}">Nombre</strong>
+                            <p class="mt-2 mb-2">
+							    <span th:if="${comentario.tipo.name() == 'clase'}">
+							        Clase: <b th:text="${comentario.clase.nombre}"></b>
+							    </span>
+							    <span th:if="${comentario.tipo.name() == 'monitor'}">
+							        Monitor: <b th:text="${comentario.monitor.name}"></b>
+							    </span>
+							</p>
                             <p class="mb-2" th:text="${comentario.texto}">Comentario</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="rating">

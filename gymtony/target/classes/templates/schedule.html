@@ -55,7 +55,7 @@
                 </div>
             </div>
             
-            <div class="classes-list">
+            <div class="classes-list scrollable">
                 <div th:each="clase : ${dia.value.clases}" class="class-card" 
                      th:onclick="'window.location.href=\'/clases/' + ${clase.id} + '\''">
                     

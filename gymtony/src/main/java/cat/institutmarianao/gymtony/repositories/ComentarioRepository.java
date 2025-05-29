@@ -28,5 +28,8 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
     	       "(:calificacion IS NULL OR c.calificacion = :calificacion)")
     	List<Comentario> buscarPorUsuarioYCalificacion(@Param("usuario") String usuario,
     	                                               @Param("calificacion") Integer calificacion);
+    
+    List<Comentario> findByMonitor_IdAndClaseIsNull(Long monitorId);
+
 
 }
